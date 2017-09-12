@@ -48,6 +48,7 @@ public class CompilingClassLoader extends ClassLoader
 			else*/
 			{
 				JavaCompiler javac = new EclipseCompiler();//ToolProvider.getSystemJavaCompiler();
+				
 
 				//MyDiagnosticListener diagnosticListener = new MyDiagnosticListener();
 				DiagnosticListener<JavaFileObject> diagnosticListener = new DiagnosticListener<JavaFileObject>()
@@ -222,8 +223,8 @@ public class CompilingClassLoader extends ClassLoader
 		String fileStub = name.replace('.', '/');
 		// Build objects pointing to the source code (.java) and object
 		// code (.class)
-		String javaFilename = System.getProperty("java.io.tmpdir") + "/simuLab/" + fileStub + ".java";
-		String classFilename = System.getProperty("java.io.tmpdir") + "/simuLab/" + fileStub + ".class";
+		String javaFilename = System.getProperty("java.io.tmpdir") + "/simbigraphTMP/" + fileStub + ".java";
+		String classFilename = System.getProperty("java.io.tmpdir") + "/simbigraphTMP/" + fileStub + ".class";
 		File javaFile = new File(javaFilename);
 		File classFile = new File(classFilename);
 		//System.out.println("j " + javaFile.lastModified() + " c " + 

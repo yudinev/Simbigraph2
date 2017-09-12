@@ -55,6 +55,7 @@ import simbigraph.grid.pseudogrid.PseudoLatticePanel;
 import simbigraph.grid.views.Grid2DPanel;
 import simbigraph.grid.views.MainGrid3D;
 import simbigraph.projections.DecompositionGraphProjection;
+import simbigraph.projections.KronnekerGraphProjection;
 import simbigraph.projections.Lattice2DProjection;
 import simbigraph.projections.Lattice3DProjection;
 import simbigraph.projections.NeighborhoodGraphProjection;
@@ -72,22 +73,25 @@ import temp.SimulationGraphSIRS;
 import temp.SimulationPseudo2;
 import temp.SimulationPseudoSIR;
 import edu.uci.ics.jung.graph.util.Pair;
+
 /**
  * 
  * @author Eugene Eudene
  * 
  * @version $Revision$ $Date$
  * 
- * Class of the main application window. Defines the Toolbar, splin panes, 
- * which contain information about network structures and its properties.
- */ 
+ *          Class of the main application window. Defines the Toolbar, splin
+ *          panes, which contain information about network structures and its
+ *          properties.
+ */
 public class MainFrame extends JFrame {
 	/**
 	 * Since it is possible work with only one projection, make it static
-	*/
-	//in the future to change, either in singleton, or add the ability to work with multiple projections
+	 */
+	// in the future to change, either in singleton, or add the ability to work
+	// with multiple projections
 	public static Projection selectedSBGNode;
-	
+
 	private HashMap<String, AbstractButton> toolbarButtons = new HashMap<String, AbstractButton>();
 	private JTabbedPane jTabbedPaneWorkspace;
 	private JTree jTreeProjects;
@@ -97,7 +101,7 @@ public class MainFrame extends JFrame {
 	private File openedFile = null;
 	private String lastDir = "";
 	private Simulation sim;
-	
+
 	private void doToolBar() {
 		JToolBar toolBar = new JToolBar();
 		toolBar.setRollover(true);
@@ -116,11 +120,10 @@ public class MainFrame extends JFrame {
 		toolbarButtons.put("jButtonNew", jButtonView);
 		jButtonView.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
-			
-					CreateModel op = new CreateModel();
-					op.execute();
-				
-				//doModel();
+
+				CreateModel op = new CreateModel();
+				op.execute();
+				// doModel();
 			}
 		});
 		JButton jButtonOpen = new JButton();
@@ -132,7 +135,7 @@ public class MainFrame extends JFrame {
 		jButtonOpen.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				jButtonOpenActionPerformed(evt);
-				for (String nAme : toolbarButtons.keySet()) 
+				for (String nAme : toolbarButtons.keySet())
 					toolbarButtons.get(nAme).setEnabled(true);
 			}
 		});
@@ -168,37 +171,31 @@ public class MainFrame extends JFrame {
 		toolBar.add(jButtonSaveAs);
 		toolbarButtons.put("jButtonSaveAs", jButtonSaveAs);
 		toolBar.addSeparator();
-		
-		
-		
+
 		for (String nAme : toolbarButtons.keySet()) {
 			toolbarButtons.get(nAme).setEnabled(false);
 		}
 		jButtonOpen.setEnabled(true);
 	}
-	
+
 	protected void jButtonStartActionPerformed(ActionEvent evt) {
 		sim.start();
 	}
-/**
- *  Creates Main Frame of the Project 
- *  Set images for the elements and dimensions of the main window
- */
+
+	/**
+	 * Creates Main Frame of the Project Set images for the elements and
+	 * dimensions of the main window
+	 */
 	public MainFrame(String name) {
-		super(name);  
+		super(name);
 
 		// Назначаю UI представителя
-		for (UIManager.LookAndFeelInfo laf : UIManager
-				.getInstalledLookAndFeels()) {
-			if ("Nimbus".equals(laf.getName())) {
-				try {
-					UIManager.setLookAndFeel(laf.getClassName());
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				break;
-			}
-		}
+		
+		 for (UIManager.LookAndFeelInfo laf : UIManager
+		 .getInstalledLookAndFeels()) { if ("Melal".equals(laf.getName())) {
+		 try { UIManager.setLookAndFeel(laf.getClassName()); } catch
+		 (Exception e) { e.printStackTrace(); } break; } }
+		
 		// Итак
 		setLayout(new java.awt.BorderLayout());
 		// Добавляю тулбар на север
@@ -235,17 +232,14 @@ public class MainFrame extends JFrame {
 		project.add(new CustomTreeNode("Deterministic PA-graph"));
 		project.add(new CustomTreeNode("Stohastic PA-graph"));
 		project.add(new CustomTreeNode("Networks"));
-		project.add(new CustomTreeNode("Continuous Area"));
-
-
+		project.add(new CustomTreeNode("Kronneker graph"));
 
 		CustomTreeNode category = new CustomTreeNode("Network formation games");
 		rootProjects.add(category);
-		
+
 		category.add(new CustomTreeNode("Decomposition graph"));
 		category.add(new CustomTreeNode("Neigborhood graph"));
 		category.add(new CustomTreeNode("Delauney Triangulation"));
-
 
 		jTreeProjects = new JTree(rootProjects);
 		jTreeProjects.setRootVisible(false);
@@ -256,54 +250,67 @@ public class MainFrame extends JFrame {
 			}
 		});
 		jTreeProjects.setCellRenderer(new TreeIconRenderer());
-		
+
 		JScrollPane jScrollPane2 = new JScrollPane();
 		jScrollPane2.setViewportView(jTreeProjects);
 		JTabbedPane jTabbedPane2 = new JTabbedPane();
 		jTabbedPane2.addTab("Projections", new ImageIcon(getClass()
-				.getResource("/images/IconBrowseProject.png")),
-				jScrollPane2);
-		jTabbedPane2.setTabComponentAt(0, new ButtonTabComponent(jTabbedPane2,
-				new ImageIcon(getClass().getResource(
-						"/images/IconBrowseProject.png")), false));
+				.getResource("/images/IconBrowseProject.png")), jScrollPane2);
+		jTabbedPane2.setTabComponentAt(0,
+				new ButtonTabComponent(jTabbedPane2, new ImageIcon(getClass()
+						.getResource("/images/IconBrowseProject.png")), false));
 		jSplitPane2.setRightComponent(jTabbedPane2);
 		jSplitPane2.setResizeWeight(1);
 		jSplitPane1.setTopComponent(jSplitPane2);
 		jSplitPane1.setResizeWeight(1);
 		propertiesPanel = new PropertiesPanel();
 		jTextPaneConsole = new JTextPane();
-        jTextPaneConsole.setFont(new java.awt.Font(java.awt.Font.MONOSPACED, java.awt.Font.PLAIN, 14));
-        
-        JScrollPane jScrollPane6 = new JScrollPane();
-    	jScrollPane6.setViewportView(jTextPaneConsole);
-        JTabbedPane jTabbedPane3 = new JTabbedPane();
-        jTabbedPane3.addTab("Properties", new ImageIcon(getClass().getResource("/images/IconProperties.png")), propertiesPanel);
-        jTabbedPane3.setTabComponentAt(0, new ButtonTabComponent(jTabbedPane3, new ImageIcon(getClass().getResource("/images/IconProperties.png")), false));
-        jTabbedPane3.addTab("Console", new ImageIcon(getClass().getResource("/images/IconOutput.png")), jScrollPane6);
-        jTabbedPane3.setTabComponentAt(1, new ButtonTabComponent(jTabbedPane3, new ImageIcon(getClass().getResource("/images/IconOutput.png")), false));
-        jTabbedPane3.setTabPlacement(JTabbedPane.BOTTOM);
+		jTextPaneConsole.setFont(new java.awt.Font(java.awt.Font.MONOSPACED,
+				java.awt.Font.PLAIN, 14));
+
+		JScrollPane jScrollPane6 = new JScrollPane();
+		jScrollPane6.setViewportView(jTextPaneConsole);
+		JTabbedPane jTabbedPane3 = new JTabbedPane();
+		jTabbedPane3.addTab(
+				"Properties",
+				new ImageIcon(getClass().getResource(
+						"/images/IconProperties.png")), propertiesPanel);
+		jTabbedPane3.setTabComponentAt(0,
+				new ButtonTabComponent(jTabbedPane3, new ImageIcon(getClass()
+						.getResource("/images/IconProperties.png")), false));
+		jTabbedPane3
+				.addTab("Console",
+						new ImageIcon(getClass().getResource(
+								"/images/IconOutput.png")), jScrollPane6);
+		jTabbedPane3.setTabComponentAt(1,
+				new ButtonTabComponent(jTabbedPane3, new ImageIcon(getClass()
+						.getResource("/images/IconOutput.png")), false));
+		jTabbedPane3.setTabPlacement(JTabbedPane.BOTTOM);
 
 		jSplitPane1.setBottomComponent(jTabbedPane3);
 		setSize(new Dimension(1000, 700));
 		setPreferredSize(new Dimension(1000, 700));
 		setLocationRelativeTo(null);
 		setVisible(true);
-		//redirectSystemStreams();
+		// redirectSystemStreams();
 	}
-/**
- * set selectedSBGNode(current Projection) depending on the selected structure in the structure tree\
- * in MainFrame 
- * @param evt mouse clip event
- */
+
+	/**
+	 * set selectedSBGNode(current Projection) depending on the selected
+	 * structure in the structure tree\ in MainFrame
+	 * 
+	 * @param evt
+	 *            mouse clip event
+	 */
 	private void jTreeProjectsMouseClicked(java.awt.event.MouseEvent evt) {
 		if (evt.getButton() == MouseEvent.BUTTON1 && evt.getClickCount() == 2
 				&& jTreeProjects.getSelectionPath().getPathCount() > 2) {
 			System.out.println(jTreeProjects.getSelectionModel()
 					.getSelectionPath().getLastPathComponent());
-			if(selectedSBGNode!=null)selectedSBGNode.stop();
-			if (new String("Networks").equals(jTreeProjects
-					.getSelectionModel().getSelectionPath()
-					.getLastPathComponent().toString())) {
+			if (selectedSBGNode != null)
+				selectedSBGNode.stop();
+			if (new String("Networks").equals(jTreeProjects.getSelectionModel()
+					.getSelectionPath().getLastPathComponent().toString())) {
 
 				selectedSBGNode = new NetworksProjection();
 				jTabbedPaneWorkspace.removeAll();
@@ -321,8 +328,8 @@ public class MainFrame extends JFrame {
 						selectedSBGNode.getPanel());
 				propertiesPanel.addRows(selectedSBGNode);
 			} else if (jTreeProjects.getSelectionModel().getSelectionPath()
-					.getLastPathComponent().toString().equals(
-							"Deterministic PA-graph")) {
+					.getLastPathComponent().toString()
+					.equals("Deterministic PA-graph")) {
 				selectedSBGNode = new PAttachDetermGraphProjection();
 				jTabbedPaneWorkspace.removeAll();
 				jTabbedPaneWorkspace.addTab(jTreeProjects.getSelectionPath()
@@ -331,17 +338,18 @@ public class MainFrame extends JFrame {
 				propertiesPanel.removeAll();
 				propertiesPanel.addRows(selectedSBGNode);
 			} else if (jTreeProjects.getSelectionModel().getSelectionPath()
-					.getLastPathComponent().toString().equals(
-					"Stohastic PA-graph")) {
-		selectedSBGNode = new PAttachStohasticGraphProjection();
-		jTabbedPaneWorkspace.removeAll();
-		jTabbedPaneWorkspace.addTab(jTreeProjects.getSelectionPath()
-				.getLastPathComponent().toString(), null,
-				selectedSBGNode.getPanel());
-		propertiesPanel.removeAll();
-		propertiesPanel.addRows(selectedSBGNode);
-	} else if (jTreeProjects.getSelectionModel().getSelectionPath()
-					.getLastPathComponent().toString().equals("Decomposition graph")) {
+					.getLastPathComponent().toString()
+					.equals("Stohastic PA-graph")) {
+				selectedSBGNode = new PAttachStohasticGraphProjection();
+				jTabbedPaneWorkspace.removeAll();
+				jTabbedPaneWorkspace.addTab(jTreeProjects.getSelectionPath()
+						.getLastPathComponent().toString(), null,
+						selectedSBGNode.getPanel());
+				propertiesPanel.removeAll();
+				propertiesPanel.addRows(selectedSBGNode);
+			} else if (jTreeProjects.getSelectionModel().getSelectionPath()
+					.getLastPathComponent().toString()
+					.equals("Decomposition graph")) {
 				selectedSBGNode = new DecompositionGraphProjection();
 				jTabbedPaneWorkspace.removeAll();
 				jTabbedPaneWorkspace.addTab(jTreeProjects.getSelectionPath()
@@ -349,9 +357,9 @@ public class MainFrame extends JFrame {
 						selectedSBGNode.getPanel());
 				propertiesPanel.removeAll();
 				propertiesPanel.addRows(selectedSBGNode);
-			}else if (jTreeProjects.getSelectionModel().getSelectionPath()
+			} else if (jTreeProjects.getSelectionModel().getSelectionPath()
 					.getLastPathComponent().toString().equals("2D Lattices")) {
-			
+
 				selectedSBGNode = new Lattice2DProjection();
 				jTabbedPaneWorkspace.removeAll();
 				jTabbedPaneWorkspace.addTab(jTreeProjects.getSelectionPath()
@@ -359,8 +367,9 @@ public class MainFrame extends JFrame {
 						selectedSBGNode.getPanel());
 				propertiesPanel.removeAll();
 				propertiesPanel.addRows(selectedSBGNode);
-			}else if (jTreeProjects.getSelectionModel().getSelectionPath()
-					.getLastPathComponent().toString().equals("Neigborhood graph")) {
+			} else if (jTreeProjects.getSelectionModel().getSelectionPath()
+					.getLastPathComponent().toString()
+					.equals("Neigborhood graph")) {
 				selectedSBGNode = new NeighborhoodGraphProjection();
 				jTabbedPaneWorkspace.removeAll();
 				jTabbedPaneWorkspace.addTab(jTreeProjects.getSelectionPath()
@@ -369,7 +378,8 @@ public class MainFrame extends JFrame {
 				propertiesPanel.removeAll();
 				propertiesPanel.addRows(selectedSBGNode);
 			} else if (jTreeProjects.getSelectionModel().getSelectionPath()
-					.getLastPathComponent().toString().equals("Delauney Triangulation")) {
+					.getLastPathComponent().toString()
+					.equals("Delauney Triangulation")) {
 				selectedSBGNode = new TriangulationDelauneyProjection();
 				jTabbedPaneWorkspace.removeAll();
 				jTabbedPaneWorkspace.addTab(jTreeProjects.getSelectionPath()
@@ -377,21 +387,32 @@ public class MainFrame extends JFrame {
 						selectedSBGNode.getPanel());
 				propertiesPanel.removeAll();
 				propertiesPanel.addRows(selectedSBGNode);
-			}else if (jTreeProjects.getSelectionModel().getSelectionPath()
-					.getLastPathComponent().toString().equals("Pseudo Lattices")) {
+			} else if (jTreeProjects.getSelectionModel().getSelectionPath()
+					.getLastPathComponent().toString()
+					.equals("Pseudo Lattices")) {
 				selectedSBGNode = new PseudoLatticeProjection();
 				jTabbedPaneWorkspace.removeAll();
 				jTabbedPaneWorkspace.addTab(jTreeProjects.getSelectionPath()
 						.getLastPathComponent().toString(), null,
-				selectedSBGNode.getPanel());
+						selectedSBGNode.getPanel());
 				propertiesPanel.removeAll();
 				propertiesPanel.addRows(selectedSBGNode);
-	}
-			
+			} else if (jTreeProjects.getSelectionModel().getSelectionPath()
+					.getLastPathComponent().toString()
+					.equals("Kronneker graph")) {
+				selectedSBGNode = new KronnekerGraphProjection();
+				jTabbedPaneWorkspace.removeAll();
+				jTabbedPaneWorkspace.addTab(jTreeProjects.getSelectionPath()
+						.getLastPathComponent().toString(), null,
+						selectedSBGNode.getPanel());
+				propertiesPanel.removeAll();
+				propertiesPanel.addRows(selectedSBGNode);
+			}
+
 			for (String nAme : toolbarButtons.keySet()) {
 				toolbarButtons.get(nAme).setEnabled(true);
 			}
-	
+
 		}
 	}
 
@@ -405,8 +426,8 @@ public class MainFrame extends JFrame {
 			jButtonSaveAsActionPerformed(evt);
 		}
 	}
-	
-	//сохранить файл проекта
+
+	// сохранить файл проекта
 	private void jButtonSaveAsActionPerformed(java.awt.event.ActionEvent evt) {
 		JFileChooser fc = new JFileChooser();
 		// fc.setSelectedFile(new java.io.File(aO1.getClass().getName()));
@@ -425,8 +446,8 @@ public class MainFrame extends JFrame {
 			}
 		}
 	}
-	
-	//открыть файл проекта
+
+	// открыть файл проекта
 	private void jButtonOpenActionPerformed(java.awt.event.ActionEvent evt) {
 		JFileChooser fc = new JFileChooser();
 		fc.setFileFilter(new SbdFilter());
@@ -442,34 +463,37 @@ public class MainFrame extends JFrame {
 		}
 	}
 
-///================================================================================	
+	// /================================================================================
 	public static void main(String[] args) {
 		MainFrame mf = new MainFrame("SimBiGraph");
 		mf.pack();
 		mf.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
-//=================================================
+
+	// =================================================
 	class CreateModel extends javax.swing.SwingWorker<Void, Void> {
 		ProgressDialog pd = null;
 
-	public CreateModel() {
-		// TODO Auto-generated constructor stub
-		pd = new ProgressDialog("creating network...");
-		//doModel();
-	}	
-		
-	@Override
-	protected Void doInBackground() throws Exception {
+		public CreateModel() {
+			// TODO Auto-generated constructor stub
+			pd = new ProgressDialog("creating network...");
+			// doModel();
+		}
 
-		doModel();
-		return null;
+		@Override
+		protected Void doInBackground() throws Exception {
+
+			doModel();
+			return null;
+		}
+
+		@Override
+		public void done() {
+			pd.dispose();
+		}
 	}
-	@Override
-	public void done() {
-		pd.dispose();
-	}
-	}
-///================================================================================
+
+	// /================================================================================
 	class SaveProcess extends javax.swing.SwingWorker<Void, Void> {
 		String projectName = "";
 		File selectedFile = null;
@@ -497,15 +521,12 @@ public class MainFrame extends JFrame {
 				for (int j = 0; j < selectedSBGNode.getProperties().size(); j++) {
 					writer.writeStartElement(selectedSBGNode.getProperties()
 							.get(j)[1]);
-					writer
-							.writeCData(selectedSBGNode.getProperties().get(j)[2]);
+					writer.writeCData(selectedSBGNode.getProperties().get(j)[2]);
 					writer.writeEndElement();
 				}
 
 				for (int j = 0; j < selectedSBGNode.getEvents().size(); j++) {
-					writer
-							.writeStartElement(selectedSBGNode.getEvents().get(
-									j)[0]);
+					writer.writeStartElement(selectedSBGNode.getEvents().get(j)[0]);
 					writer.writeCData(selectedSBGNode.getEvents().get(j)[1]);
 					writer.writeEndElement();
 				}
@@ -562,62 +583,64 @@ public class MainFrame extends JFrame {
 				org.w3c.dom.Node projectNode = doc.getFirstChild();
 				String type = projectNode.getAttributes().item(0)
 						.getNodeValue();
-				
+
 				if (type.equals("Networks")) {
 					selectedSBGNode = new NetworksProjection();
-				} 
-				else if (type.equals("3D Lattices")) {
+				} else if (type.equals("3D Lattices")) {
 					selectedSBGNode = new Lattice3DProjection();
-				}
-				else if (type.equals("2D Lattices")) {
+				} else if (type.equals("2D Lattices")) {
 					selectedSBGNode = new Lattice2DProjection();
-				}
-				else if (type.equals("ProjGraphPAttachDeterm")) {
+				} else if (type.equals("ProjGraphPAttachDeterm")) {
 					selectedSBGNode = new PAttachDetermGraphProjection();
-				}
-				else if (type.equals("Pseudo Lattices")) {
+				} else if (type.equals("Pseudo Lattices")) {
 					selectedSBGNode = new PseudoLatticeProjection();
 				}
 
 				else if (type.equals("ProjGraphPAttachStohastic")) {
 					selectedSBGNode = new PAttachStohasticGraphProjection();
 				} else if (type.equals("ProjGraphNeighborhood")) {
-						selectedSBGNode = new NeighborhoodGraphProjection();
-						List<String[]> list =selectedSBGNode.getProperties();
-						Iterator<String[]> it = list.iterator();
-						System.out.println(list.size());
-						while(it.hasNext())
-						{
-							String[] a = it.next();
-							if(a[1].substring(0, 4).equals("Seed"))
-							it.remove();
-						}
-						System.out.println(list.size());
-						for (int ii = 0; ii < projectNode.getChildNodes().getLength(); ii++) {
-							org.w3c.dom.Node childNode = projectNode.getChildNodes()
-									.item(ii);
-							if(childNode.getNodeName().substring(0, 4).equals("Seed"))
-							selectedSBGNode.setProperty("seed",childNode.getNodeName(), "", "Item", "seedlist:0.1,0.9");
-						}
-				} else if (type.equals("ProjGraphDecomposition")) {
-					selectedSBGNode = new DecompositionGraphProjection();
-					List<String[]> list =selectedSBGNode.getProperties();
+					selectedSBGNode = new NeighborhoodGraphProjection();
+					List<String[]> list = selectedSBGNode.getProperties();
 					Iterator<String[]> it = list.iterator();
 					System.out.println(list.size());
-					while(it.hasNext())
-					{
+					while (it.hasNext()) {
 						String[] a = it.next();
-						if(a[1].substring(0, 3).equals("Dec"))
-						it.remove();
+						if (a[1].substring(0, 4).equals("Seed"))
+							it.remove();
 					}
 					System.out.println(list.size());
-					for (int ii = 0; ii < projectNode.getChildNodes().getLength(); ii++) {
-						org.w3c.dom.Node childNode = projectNode.getChildNodes()
-								.item(ii);
-						if(childNode.getNodeName().substring(0, 3).equals("Dec"))
-						selectedSBGNode.setProperty("dec",childNode.getNodeName(), "", "Item", "itemlist");
+					for (int ii = 0; ii < projectNode.getChildNodes()
+							.getLength(); ii++) {
+						org.w3c.dom.Node childNode = projectNode
+								.getChildNodes().item(ii);
+						if (childNode.getNodeName().substring(0, 4)
+								.equals("Seed"))
+							selectedSBGNode.setProperty("seed",
+									childNode.getNodeName(), "", "Item",
+									"seedlist:0.1,0.9");
 					}
-					
+				} else if (type.equals("ProjGraphDecomposition")) {
+					selectedSBGNode = new DecompositionGraphProjection();
+					List<String[]> list = selectedSBGNode.getProperties();
+					Iterator<String[]> it = list.iterator();
+					System.out.println(list.size());
+					while (it.hasNext()) {
+						String[] a = it.next();
+						if (a[1].substring(0, 3).equals("Dec"))
+							it.remove();
+					}
+					System.out.println(list.size());
+					for (int ii = 0; ii < projectNode.getChildNodes()
+							.getLength(); ii++) {
+						org.w3c.dom.Node childNode = projectNode
+								.getChildNodes().item(ii);
+						if (childNode.getNodeName().substring(0, 3)
+								.equals("Dec"))
+							selectedSBGNode.setProperty("dec",
+									childNode.getNodeName(), "", "Item",
+									"itemlist");
+					}
+
 				} else
 					throw new Exception("Unsupported Projection");
 
@@ -654,22 +677,23 @@ public class MainFrame extends JFrame {
 			pd.dispose();
 		}
 	}
-/**
- * Create graph using given property of the projection 
- * also creates a class Simulation that is responsible for modeling, 
- * Simulation is based on the code entered in the projection 
- * on the basis filling tab "Code" panel properties
- */
+
+	/**
+	 * Create graph using given property of the projection also creates a class
+	 * Simulation that is responsible for modeling, Simulation is based on the
+	 * code entered in the projection on the basis filling tab "Code" panel
+	 * properties
+	 */
 	void doModel() {
 		if (selectedSBGNode instanceof NetworksProjection) {
 			sim = createSimulation(selectedSBGNode);
-			//sim=new SimulationGraphSIR();
-			//sim = new SimulationGraph();
+			// sim=new SimulationGraphSIR();
+			// sim = new SimulationGraph();
 			sim.start();
 
 			NetworksProjection env = (NetworksProjection) selectedSBGNode;
 			GraphModelingPanel mn = env.getPanel();
-			
+
 			mn.vertexFactory = sim.getAgentFactory();
 
 			if (env.getProperty("source").equalsIgnoreCase("file")) {
@@ -682,170 +706,169 @@ public class MainFrame extends JFrame {
 				if (env.getProperty("Generator").equalsIgnoreCase(
 						"Barabasi-Albert"))
 					BarabasiAlbertGenerator(mn, env.getProperty("InitNodes"),
-							env.getProperty("LinksAmount"), env
-									.getProperty("EvolvSteps"));
+							env.getProperty("LinksAmount"),
+							env.getProperty("EvolvSteps"));
 				else if (env.getProperty("Generator").equalsIgnoreCase(
 						"Eppstein"))
-					EppsteinGenerator(mn, env.getProperty("NodesAmount"), env
-							.getProperty("LinksAmount"), env
-							.getProperty("RParameter"));
+					EppsteinGenerator(mn, env.getProperty("NodesAmount"),
+							env.getProperty("LinksAmount"),
+							env.getProperty("RParameter"));
 				else if (env.getProperty("Generator").equalsIgnoreCase(
 						"Erdos-Renyi"))
-					ErdosRenyiGenerator(mn, env.getProperty("NodesAmount"), env
-							.getProperty("LinkProbability"));
+					ErdosRenyiGenerator(mn, env.getProperty("NodesAmount"),
+							env.getProperty("LinkProbability"));
 				else if (env.getProperty("Generator").equalsIgnoreCase(
 						"Kleinberg"))
-					KleinbergGenerator(mn, env.getProperty("GridSize"), env
-							.getProperty("ClusteringCoefficient"));
+					KleinbergGenerator(mn, env.getProperty("GridSize"),
+							env.getProperty("ClusteringCoefficient"));
 				else if (env.getProperty("Generator").equalsIgnoreCase(
-				"CurdsBA"))
+						"CurdsBA"))
 					TvorogGenerator(mn, env.getProperty("InitNodes"),
 							env.getProperty("NodesAmount"));
-				else if (env.getProperty("Generator").equalsIgnoreCase(
-				"ConfBA"))
+				else if (env.getProperty("Generator")
+						.equalsIgnoreCase("ConfBA"))
 					ConfBAGenerator(mn, env.getProperty("NodesAmount"),
 							env.getProperty("LinksAmount"));
 				else if (env.getProperty("Generator").equalsIgnoreCase(
-				"ConfGeneralBA"))
+						"ConfGeneralBA"))
 					ConfGeneralBAGenerator(mn, env.getProperty("NodesAmount"),
 							env.getProperty("LinksAmount"));
 				else
-					SimpleGenerator(mn, env.getProperty("LinksAmount"), env
-							.getProperty("EvolvSteps"));
+					SimpleGenerator(mn, env.getProperty("LinksAmount"),
+							env.getProperty("EvolvSteps"));
 			}
 			mn.setSim(sim);
 			sim.init(null);
 
 			if (mn.vv == null)
 				mn.init();
-			
+
 			mn.setVisible(true);
 			mn.validate();
 		} else if (selectedSBGNode instanceof Lattice3DProjection) {
 			Lattice3DProjection env2 = (Lattice3DProjection) selectedSBGNode;
-			MainGrid3D mainGrid3DPanel =env2.getPanel();
-			//sim=new images.CubeInteractionSimulation();
-			//sim=new images.SimulationR();
+			MainGrid3D mainGrid3DPanel = env2.getPanel();
+			// sim=new images.CubeInteractionSimulation();
+			// sim=new images.SimulationR();
 			sim = createSimulation(selectedSBGNode);
-			
+
 			int d = Integer.valueOf(env2.getProperty("Size"));
 
 			Context.setGrid(new DefaultGrid(new WrapAroundBorders(),
 					new MultiOccupancyCellAccessor(), d, d, d));
-			
-			boolean isHex = env2.getProperty("GridType").equalsIgnoreCase("Hex");
+
+			boolean isHex = env2.getProperty("GridType")
+					.equalsIgnoreCase("Hex");
 			mainGrid3DPanel.setSim(sim);
 
-			mainGrid3DPanel.init(isHex,d);
+			mainGrid3DPanel.init(isHex, d);
 			sim.init(null);
 			mainGrid3DPanel.upd();
 
-			
 			validate();
 			sim.start();
 
-		}
-		else if (selectedSBGNode instanceof Lattice2DProjection) {
+		} else if (selectedSBGNode instanceof Lattice2DProjection) {
 			Lattice2DProjection env2 = (Lattice2DProjection) selectedSBGNode;
 			Grid2DPanel grid2DPanel = env2.getPanel();
 			sim = createSimulation(selectedSBGNode);
-			//sim=new SimulationInYan();
-			//sim=new SimulationAuto();
-			//sim= new SimulationGridInf();
-			//sim=new Simulation0();
+			// sim=new SimulationInYan();
+			// sim=new SimulationAuto();
+			// sim= new SimulationGridInf();
+			// sim=new Simulation0();
 			int d = Integer.valueOf(env2.getProperty("Size"));
 			Context.setGrid(new DefaultGrid(new WrapAroundBorders(),
 					new SingleOccupancyCellAccessor(), d, d));
 			sim.init(null);
 			grid2DPanel.setSim(sim);
-			if (env2.getProperty("GridType").equalsIgnoreCase(
-			"HEX"))	grid2DPanel.init(Grid2DPanel.TYPEGRID.HEXA);
-			else if (env2.getProperty("GridType").equalsIgnoreCase(
-			"Square"))grid2DPanel.init(Grid2DPanel.TYPEGRID.SQUARE);
-			else grid2DPanel.init(Grid2DPanel.TYPEGRID.TRIANGLE);
+			if (env2.getProperty("GridType").equalsIgnoreCase("HEX"))
+				grid2DPanel.init(Grid2DPanel.TYPEGRID.HEXA);
+			else if (env2.getProperty("GridType").equalsIgnoreCase("Square"))
+				grid2DPanel.init(Grid2DPanel.TYPEGRID.SQUARE);
+			else
+				grid2DPanel.init(Grid2DPanel.TYPEGRID.TRIANGLE);
 			grid2DPanel.repaint();
-			//System.out.println("число агентов "+grid2DPanel.grid.size());
+			// System.out.println("число агентов "+grid2DPanel.grid.size());
 			validate();
 			sim.start();
-		}
-		else if (selectedSBGNode instanceof TriangulationDelauneyProjection) {
+		} else if (selectedSBGNode instanceof TriangulationDelauneyProjection) {
 			TriangulationDelauneyProjection env2 = (TriangulationDelauneyProjection) selectedSBGNode;
 			DelauneyPanel delPan = env2.getPanel();
-			
+
 			jTabbedPaneWorkspace.addTab("Graph", null,
-					((TriangulationDelauneyProjection)selectedSBGNode).getPanelGraph());
+					((TriangulationDelauneyProjection) selectedSBGNode)
+							.getPanelGraph());
 			delPan.init();
 			delPan.repaint();
 			validate();
-		}
-		else if (selectedSBGNode instanceof PseudoLatticeProjection) {
+		} else if (selectedSBGNode instanceof PseudoLatticeProjection) {
 			PseudoLatticeProjection env = (PseudoLatticeProjection) selectedSBGNode;
 			PseudoLatticePanel pslPanel = env.getPanel();
 			sim = createSimulation(selectedSBGNode);
-			//sim=new SimulationPseudoSIR();
+			// sim=new SimulationPseudoSIR();
 			pslPanel.setSim(sim);
 			sim.start();
-			Factory<DelanuneyAgent> agFactory = (Factory<DelanuneyAgent>)sim.getAgentFactory();
-			//sim.init(null);
-			pslPanel.init(env.getProperty("FileName"),agFactory);
+			Factory<DelanuneyAgent> agFactory = (Factory<DelanuneyAgent>) sim
+					.getAgentFactory();
+			// sim.init(null);
+			pslPanel.init(env.getProperty("FileName"), agFactory);
 			sim.init(null);
 			pslPanel.repaint();
 			validate();
-		}
-		else if (selectedSBGNode instanceof NeighborhoodGraphProjection) {
+		} else if (selectedSBGNode instanceof NeighborhoodGraphProjection) {
 			NeighborhoodGraphProjection env2 = (NeighborhoodGraphProjection) selectedSBGNode;
 			List<String> graphsCode = env2.getItemsProperties("seed");
-			if(graphsCode==null||graphsCode.size()==0){
-			     JOptionPane.showMessageDialog(
-			             null,
-			             "Please, add all seed properly",
-			             "Error!",
-			             JOptionPane.ERROR_MESSAGE);
+			if (graphsCode == null || graphsCode.size() == 0) {
+				JOptionPane.showMessageDialog(null,
+						"Please, add all seed properly", "Error!",
+						JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 			List<Double> listProp = new ArrayList();
 			List<Pair<Double>> list = new ArrayList();
-			for(String string:graphsCode)
-			{
-				list.add(new Pair(Double.valueOf(string.split(",")[0]),Double.valueOf(string.split(",")[1])));
+			for (String string : graphsCode) {
+				list.add(new Pair(Double.valueOf(string.split(",")[0]), Double
+						.valueOf(string.split(",")[1])));
 				listProp.add(Double.valueOf(string.split(",")[0]));
 			}
-			double summD=0.0;
-			for(Double d:listProp){
-				summD=summD+d;
+			double summD = 0.0;
+			for (Double d : listProp) {
+				summD = summD + d;
 			}
-			if(Math.abs(summD-1.0)>0.0001){
-			     JOptionPane.showMessageDialog(
-			             null,
-			             "Sum of probabilities getting the graphs decomposition must be 1",
-			             "Error!",
-			             JOptionPane.ERROR_MESSAGE);
+			if (Math.abs(summD - 1.0) > 0.0001) {
+				JOptionPane
+						.showMessageDialog(
+								null,
+								"Sum of probabilities getting the graphs decomposition must be 1",
+								"Error!", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
 
-			//sim = createSimulation(selectedSBGNode);
+			// sim = createSimulation(selectedSBGNode);
 			int dx = Integer.valueOf(env2.getProperty("Size").split(",")[0]);
 			int dy = Integer.valueOf(env2.getProperty("Size").split(",")[1]);
-			double p= Double.valueOf(env2.getProperty("Density"));
+			double p = Double.valueOf(env2.getProperty("Density"));
 			env2.getPanel().setParameters(dx, dy, p, list);
 			sim = new SimulationNei();
 			env2.getPanel().setSim(sim);
 			env2.getPanel().repaint();
 			sim.start();
 			jTabbedPaneWorkspace.addTab(jTreeProjects.getSelectionPath()
-					.getLastPathComponent().toString()+"Graph", null,
-					((NeighborhoodGraphProjection)selectedSBGNode).getPanelGraph());
+					.getLastPathComponent().toString()
+					+ "Graph", null,
+					((NeighborhoodGraphProjection) selectedSBGNode)
+							.getPanelGraph());
 			validate();
-			
+
 		} else if (selectedSBGNode instanceof PAttachDetermGraphProjection) {
 			sim = createSimulation(selectedSBGNode);
-			//sim=new SimulationGraphSIR();
-			 //sim = new Simulation22();
+			// sim=new SimulationGraphSIR();
+			// sim = new Simulation22();
 			// selectedSBGNode.setSim(sim);
 			PAttachDetermGraphProjection env = (PAttachDetermGraphProjection) selectedSBGNode;
 			int dx = 0, dy = 0;
 			GraphModelingPanel mn = (GraphModelingPanel) env.getPanel();
-			
+
 			Factory<Object> agFactory = sim.getAgentFactory();
 			mn.vertexFactory = agFactory;
 			if (env.getProperty("source").equalsIgnoreCase("Real Data")) {
@@ -856,13 +879,13 @@ public class MainFrame extends JFrame {
 			else {
 				int parameter1 = Integer.valueOf(env.getProperty("ParameterM"));
 				int steps = Integer.valueOf(env.getProperty("EvolvSteps"));
-				boolean isDirected = false;Boolean.valueOf(env
-						.getProperty("Directed"));
+				boolean isDirected = false;
+				Boolean.valueOf(env.getProperty("Directed"));
 				mn.setNet(env.getProperty("FileName"));
 				PrefferentialAttachment prefRule = createPrefAtachRule(selectedSBGNode);
 				mn.EvolveGraph(parameter1, steps, prefRule, isDirected);
 			}
-			//System.out.println("Загрузил, начинаю отображение");
+			// System.out.println("Загрузил, начинаю отображение");
 			mn.setSim(sim);
 
 			if (mn.vv == null)
@@ -880,13 +903,14 @@ public class MainFrame extends JFrame {
 		} else if (selectedSBGNode instanceof PAttachStohasticGraphProjection) {
 			sim = createSimulation(selectedSBGNode);
 			// selectedSBGNode.setSim(sim);
-			//sim = new SimulationGraphSIR();
+			// sim = new SimulationGraphSIR();
 
-			 //selectedSBGNode.setSim(sim);
+			// selectedSBGNode.setSim(sim);
 
 			PAttachStohasticGraphProjection env = (PAttachStohasticGraphProjection) selectedSBGNode;
 			int dx = 0, dy = 0;
-			GraphModelingPanel grid2DPanel = (GraphModelingPanel) env.getPanel();
+			GraphModelingPanel grid2DPanel = (GraphModelingPanel) env
+					.getPanel();
 			grid2DPanel.vertexFactory = sim.getAgentFactory();
 			if (env.getProperty("source").equalsIgnoreCase("Real Data")) {
 				// грузи из файла
@@ -897,21 +921,21 @@ public class MainFrame extends JFrame {
 				String str = env.getProperty("VerTable");
 				int steps = Integer.valueOf(env.getProperty("EvolvSteps"));
 				String[] doub = str.split("/n");
-				double[] d=new double[doub.length];
-				double sum =0.;
+				double[] d = new double[doub.length];
+				double sum = 0.;
 				for (int i = 0; i < doub.length; i++) {
-					d[i]=Double.valueOf(doub[i]);
-					sum=sum+d[i];
+					d[i] = Double.valueOf(doub[i]);
+					sum = sum + d[i];
 				}
-				if(Math.abs(sum-1.0)>0.0001){
-				     JOptionPane.showMessageDialog(
-				             null,
-				             "Sum of probabilities of the attachments must be 1",
-				             "Error!",
-				             JOptionPane.ERROR_MESSAGE);
+				if (Math.abs(sum - 1.0) > 0.0001) {
+					JOptionPane
+							.showMessageDialog(
+									null,
+									"Sum of probabilities of the attachments must be 1",
+									"Error!", JOptionPane.ERROR_MESSAGE);
 					return;
 				}
-				boolean isDirected = false;//Boolean.valueOf(env.getProperty("Directed"));
+				boolean isDirected = false;// Boolean.valueOf(env.getProperty("Directed"));
 
 				grid2DPanel.setNet(env.getProperty("FileName"));
 
@@ -926,7 +950,8 @@ public class MainFrame extends JFrame {
 				grid2DPanel.init();
 			}
 			grid2DPanel.setVisible(true);
-			if(grid2DPanel.vv!=null)grid2DPanel.vv.repaint();
+			if (grid2DPanel.vv != null)
+				grid2DPanel.vv.repaint();
 			grid2DPanel.validate();
 			sim.init(null);
 			sim.start();
@@ -935,23 +960,21 @@ public class MainFrame extends JFrame {
 			// sim = createSimulation(selectedSBGNode);
 
 			DecompositionGraphProjection env = (DecompositionGraphProjection) selectedSBGNode;
-			GraphDecompositionPanel mn = (GraphDecompositionPanel) env.getPanel();
+			GraphDecompositionPanel mn = (GraphDecompositionPanel) env
+					.getPanel();
 			int steps = Integer.valueOf(env.getProperty("EvolvSteps"));
 
 			List<String> graphsCode = env.getItemsProperties("dec");
-			if(graphsCode==null||graphsCode.size()==0){
-			     JOptionPane.showMessageDialog(
-			             null,
-			             "Please, add all decomposition graphs properly",
-			             "Error!",
-			             JOptionPane.ERROR_MESSAGE);
+			if (graphsCode == null || graphsCode.size() == 0) {
+				JOptionPane.showMessageDialog(null,
+						"Please, add all decomposition graphs properly",
+						"Error!", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-			
+
 			List<Double> listProp = new ArrayList();
 
-			for(String string:graphsCode)
-			{
+			for (String string : graphsCode) {
 				BufferedReader br = new BufferedReader(new StringReader(string));
 				try {
 					listProp.add(Double.valueOf(br.readLine()));
@@ -961,20 +984,19 @@ public class MainFrame extends JFrame {
 					e.printStackTrace();
 				}
 			}
-			double summD=0.0;
-			for(Double d:listProp){
-				summD=summD+d;
+			double summD = 0.0;
+			for (Double d : listProp) {
+				summD = summD + d;
 			}
-			if(Math.abs(summD-1.0)>0.000001){
-			     JOptionPane.showMessageDialog(
-			             null,
-			             "Sum of probabilities getting the graphs decomposition must be 1",
-			             "Error!",
-			             JOptionPane.ERROR_MESSAGE);
+			if (Math.abs(summD - 1.0) > 0.000001) {
+				JOptionPane
+						.showMessageDialog(
+								null,
+								"Sum of probabilities getting the graphs decomposition must be 1",
+								"Error!", JOptionPane.ERROR_MESSAGE);
 				return;
 			}
-	
-			
+
 			mn.createEdgeDecomposition(graphsCode, listProp, steps);
 
 			if (mn.vv == null)
@@ -996,13 +1018,11 @@ public class MainFrame extends JFrame {
 		}
 		toolbarButtons.get("jButtonNew").setEnabled(false);
 	}
-	
-	
-	
-	//создаёт класс, ответственный за моделирование процесса
-		//динамически на основе кода занесённой в проекцию
-			//на основе заполения вкладки "Code" панели свойств
-	
+
+	// создаёт класс, ответственный за моделирование процесса
+	// динамически на основе кода занесённой в проекцию
+	// на основе заполения вкладки "Code" панели свойств
+
 	private Simulation createSimulation(Projection pr) {
 		Class<?> compiledClass = null;
 		Simulation s = null;
@@ -1032,7 +1052,8 @@ public class MainFrame extends JFrame {
 		}
 		return s;
 	}
-///
+
+	// /
 	private PrefferentialAttachment createPrefAtachRule(Projection pr) {
 		Class<?> compiledClass = null;
 		PrefferentialAttachment s = null;
@@ -1066,33 +1087,36 @@ public class MainFrame extends JFrame {
 
 		return s;
 	}
-//////////////////////////////////////////////////////////////////////////////////////
+
+	// ////////////////////////////////////////////////////////////////////////////////////
 	// Реализация генераторов стандартных графов, чего она тут-то???
-	//TODO: куда-нить перенести (в соответстующую проекцию, видимо)
-/////////////////////////////////////////////////////////////////////////////////////
-	private void SimpleGenerator(GraphModelingPanel owner, String vert, String evs) {
+	// TODO: куда-нить перенести (в соответстующую проекцию, видимо)
+	// ///////////////////////////////////////////////////////////////////////////////////
+	private void SimpleGenerator(GraphModelingPanel owner, String vert,
+			String evs) {
 		int vertices;
 		vertices = Integer.valueOf(vert);
 		int evolvingSteps = Integer.valueOf(evs);
 		owner.setMyBAGen(vertices, evolvingSteps);
 	}
 
-	private void TvorogGenerator(GraphModelingPanel owner, String tfInitVertices,
-			String tfEdgesToAttach) {
+	private void TvorogGenerator(GraphModelingPanel owner,
+			String tfInitVertices, String tfEdgesToAttach) {
 		int initVertices, edgesToAttach, evolvingSteps;
 		boolean parallel;
 
 		initVertices = Integer.valueOf(tfInitVertices);
 		edgesToAttach = Integer.valueOf(tfEdgesToAttach);
-		//evolvingSteps = Integer.valueOf(tfEvolvingSteps);
+		// evolvingSteps = Integer.valueOf(tfEvolvingSteps);
 
 		parallel = false;// chbParallel.isSelected();
 
 		Random rand = new Random();
 		owner.setTvorogGen(initVertices, edgesToAttach);
 	}
-	private void ConfGeneralBAGenerator(GraphModelingPanel owner, String tfInitVertices,
-			String tfEdgesToAttach) {
+
+	private void ConfGeneralBAGenerator(GraphModelingPanel owner,
+			String tfInitVertices, String tfEdgesToAttach) {
 		int initVertices, edgesToAttach, evolvingSteps;
 		boolean parallel;
 
@@ -1105,23 +1129,23 @@ public class MainFrame extends JFrame {
 		owner.setConfGeneralBAGen(initVertices, edgesToAttach);
 	}
 
-		private void ConfBAGenerator(GraphModelingPanel owner, String tfInitVertices,
-				String tfEdgesToAttach) {
-			int initVertices, edgesToAttach, evolvingSteps;
-			boolean parallel;
+	private void ConfBAGenerator(GraphModelingPanel owner,
+			String tfInitVertices, String tfEdgesToAttach) {
+		int initVertices, edgesToAttach, evolvingSteps;
+		boolean parallel;
 
-			initVertices = Integer.valueOf(tfInitVertices);
-			edgesToAttach = Integer.valueOf(tfEdgesToAttach);
+		initVertices = Integer.valueOf(tfInitVertices);
+		edgesToAttach = Integer.valueOf(tfEdgesToAttach);
 
-			parallel = true;// chbParallel.isSelected();
+		parallel = true;// chbParallel.isSelected();
 
-			Random rand = new Random();
-			owner.setConfBAGen(initVertices, edgesToAttach);
-		}
+		Random rand = new Random();
+		owner.setConfBAGen(initVertices, edgesToAttach);
+	}
 
-
-	private void BarabasiAlbertGenerator(GraphModelingPanel owner, String tfInitVertices,
-			String tfEdgesToAttach, String tfEvolvingSteps) {
+	private void BarabasiAlbertGenerator(GraphModelingPanel owner,
+			String tfInitVertices, String tfEdgesToAttach,
+			String tfEvolvingSteps) {
 		int initVertices, edgesToAttach, evolvingSteps;
 		boolean parallel;
 
@@ -1135,8 +1159,8 @@ public class MainFrame extends JFrame {
 		owner.setBAGen(initVertices, edgesToAttach, evolvingSteps);
 	}
 
-	private void EppsteinGenerator(GraphModelingPanel owner, String tfEppsteinNumVertices,
-			String tfEppsteinNumEdges, String tfR) {
+	private void EppsteinGenerator(GraphModelingPanel owner,
+			String tfEppsteinNumVertices, String tfEppsteinNumEdges, String tfR) {
 		int vertices, edges, r;
 
 		vertices = Integer.valueOf(tfEppsteinNumVertices);
@@ -1146,8 +1170,8 @@ public class MainFrame extends JFrame {
 
 	}
 
-	private void ErdosRenyiGenerator(GraphModelingPanel owner, String tfErdosNumVertices,
-			String tfErdosConnProb) {
+	private void ErdosRenyiGenerator(GraphModelingPanel owner,
+			String tfErdosNumVertices, String tfErdosConnProb) {
 		int vertices;
 		double prob;
 
@@ -1165,62 +1189,47 @@ public class MainFrame extends JFrame {
 		clustExp = Double.valueOf(tfKleinbergClustExp);
 		owner.KleinbergGenerator(latticeSize, clustExp);
 	}
-//////////////////////////////////////////////////////////////////////////////////////	
-	private void redirectSystemStreams()
-	{  
-		OutputStream out = new OutputStream()
-		{  
-		    @Override  
-		    public void write(int b) throws IOException
-		    {  
-		    	updateTextPane(String.valueOf((char) b));  
-		    }  
-		  
-		    @Override  
-		    public void write(byte[] b, int off, int len) throws IOException
-		    {  
-		    	updateTextPane(new String(b, off, len));  
-		    }  
-		  
-		    @Override  
-		    public void write(byte[] b) throws IOException
-		    {  
-		      write(b, 0, b.length);  
-		    }  
-		  };  
-		  
-		  System.setOut(new PrintStream(out, true));  
-		  System.setErr(new PrintStream(out, true));  
+
+	// ////////////////////////////////////////////////////////////////////////////////////
+	private void redirectSystemStreams() {
+		OutputStream out = new OutputStream() {
+			@Override
+			public void write(int b) throws IOException {
+				updateTextPane(String.valueOf((char) b));
+			}
+
+			@Override
+			public void write(byte[] b, int off, int len) throws IOException {
+				updateTextPane(new String(b, off, len));
+			}
+
+			@Override
+			public void write(byte[] b) throws IOException {
+				write(b, 0, b.length);
+			}
+		};
+
+		System.setOut(new PrintStream(out, true));
+		System.setErr(new PrintStream(out, true));
 	}
-	
-	/*private void updateTextArea(final String text)
-	{  
-		SwingUtilities.invokeLater(new Runnable()
-		{  
-			public void run()
-			{  
-				jTextPaneConsole.append(text);  
-			}  
-		});  
-	}*/
-	private void updateTextPane(final String text)
-	{
-		SwingUtilities.invokeLater(new Runnable()
-		{
-			public void run()
-			{
+
+	/*
+	 * private void updateTextArea(final String text) {
+	 * SwingUtilities.invokeLater(new Runnable() { public void run() {
+	 * jTextPaneConsole.append(text); } }); }
+	 */
+	private void updateTextPane(final String text) {
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
 				Document doc = jTextPaneConsole.getDocument();
-				try
-				{
+				try {
 					doc.insertString(doc.getLength(), text, null);
-					//jTextPaneConsole.se
+					// jTextPaneConsole.se
+				} catch (Exception e) {
 				}
-				catch (Exception e)
-				{}
 				jTextPaneConsole.setCaretPosition(doc.getLength() - 1);
 			}
 		});
 	}
-
 
 }

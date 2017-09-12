@@ -1,5 +1,6 @@
 package simbigraph.graphs.views;
 
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -39,6 +40,7 @@ import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -90,7 +92,6 @@ import simbigraph.grid.pseudogrid.SimControlPanel;
 import simbigraph.grid.views.panels2d.SquarePanel;
 import simbigraph.projections.ProjGraphPA;
 import simbigraph.util.Statistic;
-
 import edu.uci.ics.jung.algorithms.generators.random.BarabasiAlbertGenerator;
 import edu.uci.ics.jung.algorithms.generators.random.EppsteinPowerLawGenerator;
 import edu.uci.ics.jung.algorithms.generators.random.ErdosRenyiGenerator;
@@ -147,9 +148,40 @@ public class GraphModelingPanel extends SimControlPanel {
 	public VisualizationViewer getVisViewer() {
 		return vv;
 	}
+	private static Graph<Integer, Integer> getNetEdgelist(String fileName, Factory<Object> vertexFactory2, Factory<Integer> edgeFactory2) {
+		System.out.println(fileName);
+		Graph<Integer,Integer> gr = new UndirectedSparseGraph();
+		FileReader reader;
+		try {
+			reader = new FileReader(fileName);
+		
+		BufferedReader br = new BufferedReader(reader);
+		/*for (int i = 0; i <numV; i++) {
+			gr.addVertex(new Integer(i));	
+		}
+*/		String str =null;int e=0;
+		while((str=br.readLine())!=null){
+			String[] mass = str.split(" ");
+			gr.addEdge(edgeFactory2.create(), Integer.valueOf(mass[0]), Integer.valueOf(mass[1]));
+		}
+					
 
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		System.out.println("Nodes num=" + gr.getVertexCount());
+		System.out.println("Edges num=" + gr.getEdgeCount());
+		return gr;
+		
+	}
 	public void setNet(String fileName) {
 		Graph graph = new SparseGraph<Object, Integer>();
+		if(fileName.endsWith(".shpx"))
+			graph = getNetEdgelist(fileName,vertexFactory,edgeFactory);//g = createCube();
+		else	
+		{
+			
 		PajekNetReader<Graph<Object, Integer>, Object, Integer> pnr;
 		try {
 			pnr = new PajekNetReader<Graph<Object, Integer>, Object, Integer>(
@@ -160,6 +192,7 @@ public class GraphModelingPanel extends SimControlPanel {
 
 		} catch (IOException e5) {
 			System.out.println("IOException!!!!!!!!!!!!!!!!!!");
+		}
 		}
 		System.out.println("Nodes num=" + graph.getVertexCount());
 		System.out.println("Edges num=" + graph.getEdgeCount());
@@ -355,7 +388,7 @@ public class GraphModelingPanel extends SimControlPanel {
 				}
 			});
 			Box save = Box.createVerticalBox();
-			JButton buttonSave = new JButton("  Save  graph  ");
+			JButton buttonSave = new JButton("  Save  graph   ");
 			buttonSave.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
 					PajekNetWriter<Object, Integer> gm = new PajekNetWriter<Object, Integer>();
@@ -385,7 +418,7 @@ public class GraphModelingPanel extends SimControlPanel {
 				}
 			});
 			save.add(buttonSave);
-			JButton btn2 = new JButton("Statistic prop.");
+			JButton btn2 = new JButton("Degree distrib.");
 			btn2.addActionListener(new ActionListener() {
 				private void heightConstrain2(Component component) {
 					Dimension d = new Dimension(
@@ -410,6 +443,22 @@ public class GraphModelingPanel extends SimControlPanel {
 			});
 			save.add(Box.createVerticalStrut(5));
 			save.add(btn2);
+			save.add(Box.createVerticalStrut(5));
+			JButton btn3 = new JButton("  Metric prop.   ");
+			save.add(btn3);
+			save.add(Box.createVerticalStrut(5));
+			JButton btn4 = new JButton("  Motifs stats   ");
+			save.add(btn4);
+			btn4.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					JDialog mDialog= new MotifsDialog();
+					mDialog.setVisible(true);
+				}
+				
+			});
+
 			Dimension space = new Dimension(20, 20);
 			Box controls = Box.createVerticalBox();
 			// controls.add(Box.createRigidArea(space));
@@ -760,14 +809,30 @@ public class GraphModelingPanel extends SimControlPanel {
 		});
 		calcPanel.add(buttonRandRemoveEdges);
 		
-		JButton buttonCoefClast = new JButton(" Coefficient of clustering ");
+		JButton buttonCoefClast = new JButton(" Motifs & clustering");
 		buttonCoefClast.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				int[] m = Statistic.getTriAndVilk(Context.getGraph());
-				jTextPaneConsole.append("triangles :"+m[0]+" ,\ntriples :"+m[1]+ ",\nС="+3*m[0]/(double)m[1]+"\n");
-			}
-		});
+				//int[] m = Statistic.getTriAndVilk(Context.getGraph());
+				//for (int i = 0; i < files.length; i++) {
+				//	System.out.println(files[i]);
+				int count =(Integer)jSpinnerCount.getValue();
+				Motif3 m3= new Motif3(count, Context.getGraph());
+				jTextPaneConsole.append("Вершин "+m3.graph.getVertexCount()+" ребер "+m3.graph.getEdgeCount());
+				jTextPaneConsole.append("\nMotifs for 3 verticies");
+				jTextPaneConsole.append("\nn_treug "+m3.n_treug*3/(double)m3.iterations);
+				jTextPaneConsole.append("\nn_vilks "+m3.n_vilks/(double)m3.iterations);
+				jTextPaneConsole.append("\nn_vilks_toch "+m3.n_vilks_toch);
+
+					Motif4 m4= new Motif4(count, Context.getGraph());
+					jTextPaneConsole.append("\n-----------------------------------------------");
+					jTextPaneConsole.append("\nMotifs for 4 verticies");
+					jTextPaneConsole.append("\nn_klika "+m4.n_klika*12/(double)m4.iterations);
+					jTextPaneConsole.append("\nn_semi_klika "+m4.n_semi_klika*8/(double)m4.iterations);
+					jTextPaneConsole.append("\nn_kvadrat "+m4.n_kvadrat*4/(double)m4.iterations);
+					jTextPaneConsole.append("\nn_roga "+m4.n_roga/(double)m4.iterations);
+
+				}});
 		calcPanel.add(buttonCoefClast);
 		JPanel p = new JPanel();
 		p.setLayout(new BorderLayout());
@@ -788,7 +853,7 @@ public class GraphModelingPanel extends SimControlPanel {
 		params.add(new JLabel("From: "));params.add(jSpinnerStart);
 		params.add(new JLabel("      To: "));	params.add(jSpinnerEnd);
 		params.add(new JLabel("      Step: "));params.add(jSpinnerStep);
-		params.add(new JLabel("      Namber of iteration: "));params.add(jSpinnerCount);
+		params.add(new JLabel("      Number of iteration: "));params.add(jSpinnerCount);
 
 		p.add(calcPanel,BorderLayout.NORTH);
 		p.add(params,BorderLayout.SOUTH);

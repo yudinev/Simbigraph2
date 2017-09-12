@@ -1,5 +1,7 @@
 package temp;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Random;
@@ -9,14 +11,15 @@ import org.apache.commons.collections15.Factory;
 import simbigraph.core.PrefAttechRule;
 import simbigraph.graphs.prefAttachment.ConfGeneral;
 import simbigraph.graphs.prefAttachment.GenClassicalBA;
-
 import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uci.ics.jung.graph.UndirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
+import edu.uci.ics.jung.io.PajekNetReader;
 import edu.uci.ics.jung.visualization.subLayout.GraphCollapser;
 
 public class Testqlk {
@@ -43,9 +46,10 @@ public class Testqlk {
 	public Testqlk() {
 	// выбираем граф и генерируем
 		//g = doBA();
-		//g= doNotBA();
+	//g= doNotBA();
 		//double[][] mass = getTettaMatrix(g, 8);
-		g = doOrtBA();
+		//g = doOrtBA();
+		//g=getNet("Alpa07.net");
 		double[][] mass = getQMatrix(g, 10);
 		
 	
@@ -58,11 +62,30 @@ public class Testqlk {
 
 		for (int i = 0; i < mass[0].length; i++) {
 			for (int j = 0; j < mass.length; j++) {
-				System.out.print(mass[i][j]/((double) 20000) + " ");
+				System.out.print(mass[i][j]/((double) g.getEdgeCount()) + " ");
 			}
 			System.out.println();
 		}
 	}
+
+	 private Graph<Integer, Integer> getNet(String fileName) {
+		System.out.println(fileName);
+		Graph graph = new SparseGraph();
+		PajekNetReader<Graph<Integer, Integer>, Integer, Integer> pnr;
+		try {
+			pnr = new PajekNetReader<Graph<Integer, Integer>, Integer, Integer>(
+					vertexFactory, edgeFactory);
+			File file = new File(fileName);
+			pnr.load(fileName, graph);
+
+		} catch (IOException e5) {
+			System.out.println("IOException!!!!!!!!!!!!!!!!!!");
+		}
+		System.out.println("Nodes num=" + graph.getVertexCount());
+		System.out.println("Edges num=" + graph.getEdgeCount());
+		return graph;
+	}
+
 
 	private double[][] getQMatrix(Graph graph, int size) {
 		double[][] ret = new double[size][size];
@@ -89,11 +112,11 @@ public class Testqlk {
 	
 
 	private Graph<Integer, Integer> doOrtBA() {
-			Graph seed_graph = createOrtSeed();
-			GenClassicalBA gen = new GenClassicalBA(vertexFactory, edgeFactory, 2,
-					new prefRule());
+		Graph seed_graph = createOrtSeed();
+		GenClassicalBA gen = new GenClassicalBA(vertexFactory, edgeFactory, 2,
+				new prefRule());
 
-			return gen.evolve(10000-5, seed_graph);
+		return gen.evolve(10000-5, seed_graph);
 	}
 
 	private Graph createOrtSeed() {

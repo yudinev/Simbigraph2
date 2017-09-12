@@ -1,1 +1,1 @@
-C:\workspace\simbigraph\samples\TruncatedOctadron.sbg
+C:\Users\Yudinev\Desktop\simgraphJ\samples\GraphSIS.sbg

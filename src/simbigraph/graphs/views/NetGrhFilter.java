@@ -12,12 +12,13 @@ public class NetGrhFilter extends FileFilter {
 		this.f = f;
 		return f.getName().toLowerCase().endsWith(".net") ||
 				f.getName().toLowerCase().endsWith(".grh") ||
+				f.getName().toLowerCase().endsWith(".shpx") ||
 				f.isDirectory();
 	}
 	@Override
 	public String getDescription()
 	{
-		return "based budnik graph file is pajek files (*.net)";
+		return "based simbigraph graph (*.net,.*.grh,*.xml,*.shpx)";
 	}
 
 }

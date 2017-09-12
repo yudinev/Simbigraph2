@@ -6,7 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.commons.collections15.iterators.IteratorChain;
-
+ 
 /**
  * An IndexedIterable that adapts multiple IndexedItebles to behave as a single IndexedIterable.
  *
