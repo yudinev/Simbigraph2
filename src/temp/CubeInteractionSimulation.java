@@ -30,6 +30,7 @@ import simbigraph.math.RandomHelper;
  */
 
 public class CubeInteractionSimulation extends Simulation {
+//sdsds
 	public static double[] WW= new double[] {
 		0.00000000000000000000,
 		0.95937640868402100000,
