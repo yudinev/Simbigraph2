@@ -465,7 +465,7 @@ public class MainFrame extends JFrame {
 
 	// /================================================================================
 	public static void main(String[] args) {
-		MainFrame mf = new MainFrame("SimBiGraph");
+		MainFrame mf = new MainFrame("Simbigraph 2");
 		mf.pack();
 		mf.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}

@@ -445,6 +445,16 @@ public class GraphModelingPanel extends SimControlPanel {
 			save.add(btn2);
 			save.add(Box.createVerticalStrut(5));
 			JButton btn3 = new JButton("  Metric prop.   ");
+			btn3.addActionListener(new ActionListener() {
+
+				@Override
+				public void actionPerformed(ActionEvent arg0) {
+					JDialog mDialog= new MetricsDialog();
+					mDialog.setVisible(true);
+				}
+				
+			});
+			
 			save.add(btn3);
 			save.add(Box.createVerticalStrut(5));
 			JButton btn4 = new JButton("  Motifs stats   ");
