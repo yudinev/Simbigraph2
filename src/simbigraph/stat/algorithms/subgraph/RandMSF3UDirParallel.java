@@ -132,7 +132,7 @@ public class RandMSF3UDirParallel<V, E> {
     	}
     	
     	
-    	ThreeSizeSubgraphsCounterSampling<V, E> counter = new ThreeSizeSubgraphsCounterSampling<>(graph, vertexLayers);
+    	RandMSF3UDir<V, E> counter = new RandMSF3UDir<>(graph, vertexLayers);
     	List<Integer> resultsOfRuns = new ArrayList<>((int)numberOfRuns);
     	for (int i = 0; i < numberOfRuns; i++) {
     		resultsOfRuns.add(0);
@@ -186,7 +186,7 @@ public class RandMSF3UDirParallel<V, E> {
     		vertexLayer.getValue().probability = (vertexLayer.getValue().vertices.size() * vertexLayer.getKey() * (vertexLayer.getKey() - 1.)) / 2.0 / exactNumberOfForks;
     	}
     	
-    	ThreeSizeSubgraphsCounterSampling<V, E> counter = new ThreeSizeSubgraphsCounterSampling<>(graph, vertexLayers);
+    	RandMSF3UDir<V, E> counter = new RandMSF3UDir<>(graph, vertexLayers);
     	List<Integer> resultsOfRuns = new ArrayList<>((int)numberOfRuns);
     	for (int i = 0; i < numberOfRuns; i++) {
     		resultsOfRuns.add(0);

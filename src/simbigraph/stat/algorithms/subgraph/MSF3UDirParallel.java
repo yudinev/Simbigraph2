@@ -58,7 +58,7 @@ public class MSF3UDirParallel<V, E>  {
 	 */
 	
 	public void execute()  {
-		ThreeSizeSubgraphsCounterFullEnumeration<V, E> counter = new ThreeSizeSubgraphsCounterFullEnumeration<>(graph);
+		MSF3UDir<V, E> counter = new MSF3UDir<>(graph);
 		Collection<V> vertices = graph.getVertices();
 
 		ForkJoinPool forkJoinPool = new ForkJoinPool(numberOfThreads);
@@ -99,7 +99,7 @@ public class MSF3UDirParallel<V, E>  {
 	 */
 	private void doOriented() {
 
-		ThreeSizeSubgraphsCounterFullEnumeration<V, E> counter = new ThreeSizeSubgraphsCounterFullEnumeration<>(graph);
+		MSF3UDir<V, E> counter = new MSF3UDir<>(graph);
 		Collection<V> vertices = graph.getVertices();
 
 		ForkJoinPool forkJoinPool = new ForkJoinPool(numberOfThreads);

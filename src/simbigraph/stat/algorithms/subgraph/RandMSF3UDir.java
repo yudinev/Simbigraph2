@@ -16,7 +16,7 @@ import simbigraph.stat.algorithms.subgraph.RandMSF3UDirParallel.VertexLayerParam
 /**
  * @author Yudin Evgeniy, Yudina M.
  */
-public class ThreeSizeSubgraphsCounterSampling<V, E> {
+public class RandMSF3UDir<V, E> {
 
 	private Graph<V, E> graph;
 
@@ -31,7 +31,7 @@ public class ThreeSizeSubgraphsCounterSampling<V, E> {
 	 * @param vertexLayers
 	 *            layers of the vertices
 	 */
-	public ThreeSizeSubgraphsCounterSampling(Graph<V, E> graph, Map<Integer, VertexLayerParameters<V>> vertexLayers) {
+	public RandMSF3UDir(Graph<V, E> graph, Map<Integer, VertexLayerParameters<V>> vertexLayers) {
 		this.graph = graph;
 		this.vertexLayers = vertexLayers;
 	}

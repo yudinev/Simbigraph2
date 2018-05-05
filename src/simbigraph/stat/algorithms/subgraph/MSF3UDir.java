@@ -16,7 +16,7 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 /**
  * @author  Yudin Evgeniy, Yudina M.
  */
-public class ThreeSizeSubgraphsCounterFullEnumeration<V, E> {
+public class MSF3UDir<V, E> {
 
 	private Graph<V, E> graph;
 
@@ -27,7 +27,7 @@ public class ThreeSizeSubgraphsCounterFullEnumeration<V, E> {
 	 * @param graph
 	 *            the graph
 	 */
-	public ThreeSizeSubgraphsCounterFullEnumeration(Graph<V, E> graph) {
+	public MSF3UDir(Graph<V, E> graph) {
 		this.graph = graph;
 	}
 
