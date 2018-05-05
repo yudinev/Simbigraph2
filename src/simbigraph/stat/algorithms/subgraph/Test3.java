@@ -76,7 +76,7 @@ public static void main(String[] args) throws GraphStatsException {
     //ParallelDirFourSizeSubgraphsCounterSampling<Long, Long> p4= new ParallelDirFourSizeSubgraphsCounterSampling<Long, Long>(graph,10000,8);
 
     long t1=System.currentTimeMillis();
-   ParallelThreeSizeSubgraphsCounterFullEnumeration <Integer, Integer> p4= new ParallelThreeSizeSubgraphsCounterFullEnumeration(graph,8);
+   MSF3DirParallel <Integer, Integer> p4= new MSF3DirParallel(graph,8);
    // ParallelFourSizeSubgraphsCounterFullEnumeration <Integer, Integer> p= new ParallelFourSizeSubgraphsCounterFullEnumeration(graph,8);
    // p3.execute();
    // System.out.println(p3);

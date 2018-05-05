@@ -18,7 +18,7 @@ import simbigraph.stat.exception.UnsupportedEdgeTypeException;
  * 
  * @author Yudina Maria, Yudin Evgeniy
  */
-public class ParallelDirFourSizeSubgraphsCounterFullEnumeration<V, E>  {
+public class MSF4DirParallel<V, E>  {
 
 	private Graph<V, E> graph;
 
@@ -43,7 +43,7 @@ public class ParallelDirFourSizeSubgraphsCounterFullEnumeration<V, E>  {
      * @param graph the graph
      * @param numberOfThreads number of parallel threads
      */
-	public ParallelDirFourSizeSubgraphsCounterFullEnumeration(Hypergraph<V, E> graph, int numberOfThreads) {
+	public MSF4DirParallel(Hypergraph<V, E> graph, int numberOfThreads) {
         this.graph = (Graph<V, E>) graph;
         this.numberOfThreads = numberOfThreads;
     }
@@ -61,7 +61,7 @@ public class ParallelDirFourSizeSubgraphsCounterFullEnumeration<V, E>  {
 			throw new UnsupportedEdgeTypeException("The parallel version of 4-size subgraphs counter which uses full enumeration algorithm does not work with " + graph.getDefaultEdgeType() + " graph.");
 		}
 		
-		DirFourSizeSubgraphsCounterFullEnumeration<V, E> counter = new DirFourSizeSubgraphsCounterFullEnumeration<>(graph);
+		MSF4Dir<V, E> counter = new MSF4Dir<>(graph);
 		Collection<V> vertices = graph.getVertices();
 		Collection<E> edges = graph.getEdges();
 		

@@ -7,17 +7,16 @@ import java.util.Map;
 import java.util.Random;
 import java.util.Map.Entry;
 
+
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.Hypergraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
-import simbigraph.stat.algorithms.subgraph.ParallelDirFourSizeSubgraphsCounterSampling.EdgeLayerParameters;
-import simbigraph.stat.algorithms.subgraph.ParallelDirThreeSizeSubgraphsCounterSampling.VertexLayerParameters;
+import simbigraph.stat.algorithms.subgraph.RandMSF3UDirParallel.VertexLayerParameters;
 
 /**
-   * @author Yudin Evgeniy
-
+ * @author Yudin Evgeniy, Yudina M.
  */
-public class DirThreeSizeSubgraphsCounterSampling<V, E> {
+public class ThreeSizeSubgraphsCounterSampling<V, E> {
 
 	private Graph<V, E> graph;
 
@@ -26,13 +25,13 @@ public class DirThreeSizeSubgraphsCounterSampling<V, E> {
 	/**
 	 * Constructs and initializes the class.
 	 *
-     * @author Yudina Maria, Yudin Evgeniy
+	 * @author  Yudin Evgeniy, Yudina M.
 	 * @param graph
 	 *            the graph
 	 * @param vertexLayers
 	 *            layers of the vertices
 	 */
-	public DirThreeSizeSubgraphsCounterSampling(Graph<V, E> graph, Map<Integer, VertexLayerParameters<V>> vertexLayers) {
+	public ThreeSizeSubgraphsCounterSampling(Graph<V, E> graph, Map<Integer, VertexLayerParameters<V>> vertexLayers) {
 		this.graph = graph;
 		this.vertexLayers = vertexLayers;
 	}
@@ -41,7 +40,7 @@ public class DirThreeSizeSubgraphsCounterSampling<V, E> {
 	 * Chooses one of the <code>graph</code>'s "forks" randomly and tests if it
 	 * is a <code>graph</code>'s "triangle".
 	 * 
-     * @author Yudina Maria, Yudin Evgeniy
+	 * @author Yudin Evgeniy
 	 * @return 1 if "triangle" was explored or 0 if "fork" was explored
 	 */
 	public int doRun() {

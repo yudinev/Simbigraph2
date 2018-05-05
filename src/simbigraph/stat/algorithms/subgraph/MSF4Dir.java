@@ -9,7 +9,7 @@ import edu.uci.ics.jung.graph.Hypergraph;
 /**
  * @author Yudina Maria, Yudin Evgeniy
  */
-public class DirFourSizeSubgraphsCounterFullEnumeration<V, E> {
+public class MSF4Dir<V, E> {
 
 	private Graph<V, E> graph;
 
@@ -22,7 +22,7 @@ public class DirFourSizeSubgraphsCounterFullEnumeration<V, E> {
 	 * @param graph
 	 *            the graph
 	 */
-	public DirFourSizeSubgraphsCounterFullEnumeration(Hypergraph<V, E> graph) {
+	public MSF4Dir(Hypergraph<V, E> graph) {
 		this.graph = (Graph<V, E>) graph;
 	}
 
@@ -213,13 +213,13 @@ public class DirFourSizeSubgraphsCounterFullEnumeration<V, E> {
 							for (int j = i + 1; j < vert.length; j++) {
 								E o1 = graph.findEdge(vert[i], vert[j]);
 								if (o1 != null)
-									code |= DirFourSizeSubgraphsCounterSampling.arr_idx[4 * i + j];
+									code |= RandMSF4Dir.arr_idx[4 * i + j];
 								E o2 = graph.findEdge(vert[j], vert[i]);
 								if (o2 != null)
-									code |= DirFourSizeSubgraphsCounterSampling.arr_idx[4 * j + i];
+									code |= RandMSF4Dir.arr_idx[4 * j + i];
 							}
 						}
-						int ee = DirFourSizeSubgraphsCounterSampling.arrcode[code];
+						int ee = RandMSF4Dir.arrcode[code];
 						massMotif[ee] = massMotif[ee] + 1;
 
 					}
@@ -258,11 +258,11 @@ public class DirFourSizeSubgraphsCounterFullEnumeration<V, E> {
 					for (int j = i + 1; j < vert.length; j++) {
 						E o1 = graph.findEdge(vert[i], vert[j]);
 						if (o1 != null)
-							code |= DirFourSizeSubgraphsCounterSampling.arr_idx[4 * i + j];
+							code |= RandMSF4Dir.arr_idx[4 * i + j];
 						E o2 = graph.findEdge(vert[j], vert[i]);
 						if (o2 != null)
-							code |= DirFourSizeSubgraphsCounterSampling.arr_idx[4 * j + i];
-						int ee = DirFourSizeSubgraphsCounterSampling.arrcode[code];
+							code |= RandMSF4Dir.arr_idx[4 * j + i];
+						int ee = RandMSF4Dir.arrcode[code];
 						massMotif[ee] = massMotif[ee] + 1;
 					}
 				}

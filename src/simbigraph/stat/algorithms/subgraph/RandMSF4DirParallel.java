@@ -22,7 +22,7 @@ import simbigraph.stat.exception.UnsupportedEdgeTypeException;
  * 
  * @author Yudina Maria, Yudin Evgeniy
  */
-public class ParallelDirFourSizeSubgraphsCounterSampling<V, E>  {
+public class RandMSF4DirParallel<V, E>  {
 
 	
 	int[] massKoef={0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 0, 1, 1, 2, 1, 1, 2, 2, 4, 6, 6, 0, 0, 1, 1, 1, 1, 1, 1, 2, 1, 2, 1, 1, 2, 2, 2, 2, 0, 1, 1, 2, 1, 2, 1, 1, 2, 2, 2, 2, 2, 4, 6, 4, 6, 2, 2, 6, 6, 6, 6, 1, 2, 2, 2, 4, 6, 4, 6, 6, 6, 6, 4, 6, 6, 1, 2, 6, 2, 6, 6, 6, 12, 12, 6, 6, 12, 12, 12, 12, 12, 1, 1, 1, 2, 1, 2, 1, 2, 1, 2, 2, 2, 2, 2, 2, 2, 2, 6, 4, 6, 4, 6, 6, 6, 6, 6, 6, 2, 0, 1, 2, 2, 2, 1, 2, 2, 4, 6, 4, 6, 6, 6, 6, 4, 6, 6, 2, 2, 2, 2, 2, 6, 6, 6, 4, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 4, 6, 4, 6, 6, 6, 6, 6, 6, 6, 6, 12, 6, 12, 12, 12, 12, 12, 6, 6, 6, 6, 12, 12, 6, 12, 12, 12, 12, 12, 12, 12, 6, 12, 12, 6, 12, 12, 12, 12, 12, 12, 6, 6, 6, 6, 4, 6, 6, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12};
@@ -105,7 +105,7 @@ public class ParallelDirFourSizeSubgraphsCounterSampling<V, E>  {
      * @param numberOfRuns number of runs of sampling algorithm 
      * @param numberOfThreads number of parallel threads
      */
-	public ParallelDirFourSizeSubgraphsCounterSampling(Hypergraph<V, E> graph, int numberOfRuns, int numberOfThreads) {
+	public RandMSF4DirParallel(Hypergraph<V, E> graph, int numberOfRuns, int numberOfThreads) {
         this.graph = (Graph<V, E>) graph;
         this.numberOfRuns = numberOfRuns;
         this.numberOfThreads = numberOfThreads;
@@ -186,7 +186,7 @@ public class ParallelDirFourSizeSubgraphsCounterSampling<V, E>  {
     		edgeLayer.getValue().probability = (edgeLayer.getValue().edges.size() / (double)exactNumberOfPathsOfLengthThree* edgeLayer.getKey()) ;
     	}
     	
-    	DirFourSizeSubgraphsCounterSampling<V, E> counter = new DirFourSizeSubgraphsCounterSampling<>(graph, vertexLayers, edgeLayers);
+    	RandMSF4Dir<V, E> counter = new RandMSF4Dir<>(graph, vertexLayers, edgeLayers);
 
     	
     	 numberOfRunsLapka = (int)(numberOfRuns*(exactNumberOfPathsOfLengthThree)/((double)(exactNumberOfSubgraphs4_1+exactNumberOfPathsOfLengthThree)));

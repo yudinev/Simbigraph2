@@ -8,27 +8,26 @@ import java.util.Random;
 import java.util.Set;
 import java.util.Map.Entry;
 
+
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.Hypergraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
-import simbigraph.stat.algorithms.subgraph.ParallelDirThreeSizeSubgraphsCounterSampling.VertexLayerParameters;
 
 /**
-   * @author Yudin Evgeniy
-
+ * @author  Yudin Evgeniy, Yudina M.
  */
-public class DirThreeSizeSubgraphsCounterFullEnumeration<V, E> {
+public class ThreeSizeSubgraphsCounterFullEnumeration<V, E> {
 
 	private Graph<V, E> graph;
 
 	/**
 	 * Constructs and initializes the class.
 	 *
-     * @author Yudina Maria, Yudin Evgeniy
+	 * @author  Yudin Evgeniy, Yudina M.
 	 * @param graph
 	 *            the graph
 	 */
-	public DirThreeSizeSubgraphsCounterFullEnumeration(Graph<V, E> graph) {
+	public ThreeSizeSubgraphsCounterFullEnumeration(Graph<V, E> graph) {
 		this.graph = graph;
 	}
 
@@ -37,7 +36,7 @@ public class DirThreeSizeSubgraphsCounterFullEnumeration<V, E> {
 	 * calculating the number of 2-combinations from number of the successors of
 	 * the <code>vertex</code> in the <code>graph</code>.
 	 *
-     * @author Yudina Maria, Yudin Evgeniy
+	 * @author  Yudin Evgeniy, Yudina M.
 	 * @param vertex
 	 *            of the graph
 	 * @return number of "forks", that are rooted by the <code>vertex</code>
@@ -53,7 +52,7 @@ public class DirThreeSizeSubgraphsCounterFullEnumeration<V, E> {
 	 * connectivity of each pair of vertices from <code>vertex</code>'s
 	 * successors list.
 	 *
-     * @author Yudina Maria, Yudin Evgeniy
+	 * @author  Yudin Evgeniy, Yudina M.
 	 * @param vertex
 	 *            of the graph
 	 * @return number of "triangles", that are included the <code>vertex</code>

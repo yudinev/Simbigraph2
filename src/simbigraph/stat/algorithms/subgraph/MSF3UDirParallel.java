@@ -9,20 +9,18 @@ import java.util.Map.Entry;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ForkJoinPool;
 
+
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.Hypergraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
-import simbigraph.stat.algorithms.subgraph.ParallelDirThreeSizeSubgraphsCounterSampling.VertexLayerParameters;
-import simbigraph.stat.exception.UnsupportedEdgeTypeException;
 
 /**
  * This is parallel version of 3-size undirected subgraphs counter which uses
  * full enumeration algorithm.
  * 
-  * @author Yudin Evgeniy
-
+ * @author Yudin Evgeniy, Yudina M.
  */
-public class ParallelThreeSizeSubgraphsCounterFullEnumeration<V, E>  {
+public class MSF3UDirParallel<V, E>  {
 
 	private Graph<V, E> graph;
 
@@ -33,14 +31,13 @@ public class ParallelThreeSizeSubgraphsCounterFullEnumeration<V, E>  {
 	/**
 	 * Constructs and initializes the class.
 	 *
-	 * @author Yudin Evgeniy
-
+	 * @author Yudina M.
 	 * @param graph
 	 *            the graph
 	 * @param numberOfThreads
 	 *            number of parallel threads
 	 */
-	public ParallelThreeSizeSubgraphsCounterFullEnumeration(Graph<V, E> graph, int numberOfThreads) {
+	public MSF3UDirParallel(Graph<V, E> graph, int numberOfThreads) {
 		this.graph = graph;
 		this.numberOfThreads = numberOfThreads;
 	}
@@ -51,18 +48,17 @@ public class ParallelThreeSizeSubgraphsCounterFullEnumeration<V, E>  {
 	 * Saves exact number of the <code>graph</code>'s "forks" into
 	 * <code>numberOfForks</code> variable.<br>
 	 * If the <code>graph</code> includes directed edges then
-	 * <code>simbigraph.stat.exception.UnsupportedEdgeTypeException</code>
+	 * <code>com.asoiu.simbigraph.exception.UnsupportedEdgeTypeException</code>
 	 * is thrown.
 	 * <p>
 	 * The method uses Function and Parallel Stream features of Java 1.8 and
 	 * custom ForkJoinPool for parallel execution.
 	 * 
-	 * @author Yudin Evgeniy
-
-	 * @throws UnsupportedEdgeTypeException
+	 * @author Yudin Evgeniy, Yudina M.
 	 */
+	
 	public void execute()  {
-		DirThreeSizeSubgraphsCounterFullEnumeration<V, E> counter = new DirThreeSizeSubgraphsCounterFullEnumeration<>(graph);
+		ThreeSizeSubgraphsCounterFullEnumeration<V, E> counter = new ThreeSizeSubgraphsCounterFullEnumeration<>(graph);
 		Collection<V> vertices = graph.getVertices();
 
 		ForkJoinPool forkJoinPool = new ForkJoinPool(numberOfThreads);
@@ -88,8 +84,7 @@ public class ParallelThreeSizeSubgraphsCounterFullEnumeration<V, E>  {
 	}
 
 	/**
-	 * @author Yudin Evgeniy
-
+	 * @author Andrey Kurchanov
 	 */
 	@Override
 	public String toString() {
@@ -104,7 +99,7 @@ public class ParallelThreeSizeSubgraphsCounterFullEnumeration<V, E>  {
 	 */
 	private void doOriented() {
 
-		DirThreeSizeSubgraphsCounterFullEnumeration<V, E> counter = new DirThreeSizeSubgraphsCounterFullEnumeration<>(graph);
+		ThreeSizeSubgraphsCounterFullEnumeration<V, E> counter = new ThreeSizeSubgraphsCounterFullEnumeration<>(graph);
 		Collection<V> vertices = graph.getVertices();
 
 		ForkJoinPool forkJoinPool = new ForkJoinPool(numberOfThreads);

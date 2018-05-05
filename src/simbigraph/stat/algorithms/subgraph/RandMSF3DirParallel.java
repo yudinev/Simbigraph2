@@ -20,7 +20,7 @@ import simbigraph.stat.exception.UnsupportedEdgeTypeException;
  * 
  * @author Yudin Evgeniy
  */
-public class ParallelDirThreeSizeSubgraphsCounterSampling<V, E>  {
+public class RandMSF3DirParallel<V, E>  {
 
 	private Graph<V, E> graph;
 
@@ -67,7 +67,7 @@ public class ParallelDirThreeSizeSubgraphsCounterSampling<V, E>  {
      * @param numberOfRuns number of runs of sampling algorithm 
      * @param numberOfThreads number of parallel threads
      */
-	public ParallelDirThreeSizeSubgraphsCounterSampling(Graph<V, E> graph, int numberOfRuns, int numberOfThreads) {
+	public RandMSF3DirParallel(Graph<V, E> graph, int numberOfRuns, int numberOfThreads) {
         this.graph = graph;
         this.numberOfRuns = numberOfRuns;
         this.numberOfThreads = numberOfThreads;
@@ -142,7 +142,7 @@ public class ParallelDirThreeSizeSubgraphsCounterSampling<V, E>  {
     		vertexLayer.getValue().probability = (vertexLayer.getValue().vertices.size() * vertexLayer.getKey() * (vertexLayer.getKey() - 1.)) / 2.0 / exactNumberOfForks;
     	}
     	
-    	DirThreeSizeSubgraphsCounterSampling<V, E> counter = new DirThreeSizeSubgraphsCounterSampling<>(graph, vertexLayers);
+    	RandMSF3Dir<V, E> counter = new RandMSF3Dir<>(graph, vertexLayers);
     	List<Integer> resultsOfRuns = new ArrayList<>((int)numberOfRuns);
     	for (int i = 0; i < numberOfRuns; i++) {
     		resultsOfRuns.add(0);

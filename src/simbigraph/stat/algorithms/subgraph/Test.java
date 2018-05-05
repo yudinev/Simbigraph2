@@ -70,7 +70,7 @@ public static void main_old(String[] args) throws UnsupportedEdgeTypeException {
     System.out.println("E="+graph.getEdgeCount()+" V="+graph.getVertexCount());
     
    // ParallelThreeSizeSubgraphsCounterSampling<Integer, Integer> p= new ParallelThreeSizeSubgraphsCounterSampling<Integer, Integer>(graph,100000,2);
-    ParallelThreeSizeSubgraphsCounterFullEnumeration <Integer, Integer> p= new ParallelThreeSizeSubgraphsCounterFullEnumeration(graph,2);
+    MSF3DirParallel <Integer, Integer> p= new MSF3DirParallel(graph,2);
     p.execute();
     System.out.println(p);
     //saveGraph(graph, "mygraphs//my_polBlogR.net");
@@ -149,7 +149,7 @@ public static void main(String[] args) throws GraphStatsException {
 	 //   System.out.println("Запускаю метод Монте-Кало на 100 000");
 	    
 	    long t1=System.currentTimeMillis();
-	    ParallelDirThreeSizeSubgraphsCounterSampling<Long, Long> p= new ParallelDirThreeSizeSubgraphsCounterSampling<Long, Long>(graph,50000,8);
+	    RandMSF3DirParallel<Long, Long> p= new RandMSF3DirParallel<Long, Long>(graph,50000,8);
 	  //  ParallelThreeSizeSubgraphsCounterFullEnumeration <Long, Long> p= new ParallelThreeSizeSubgraphsCounterFullEnumeration(graph,1);
 	   // ParallelFourSizeSubgraphsCounterSampling<Long, Long> p= new ParallelFourSizeSubgraphsCounterSampling<Long, Long>(graph,50000,2);
 	    p.execute();

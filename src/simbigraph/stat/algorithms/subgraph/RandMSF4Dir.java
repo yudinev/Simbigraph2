@@ -8,13 +8,13 @@ import java.util.Map.Entry;
 
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.Hypergraph;
-import simbigraph.stat.algorithms.subgraph.ParallelDirFourSizeSubgraphsCounterSampling.EdgeLayerParameters;
-import simbigraph.stat.algorithms.subgraph.ParallelDirFourSizeSubgraphsCounterSampling.VertexLayerParameters;
+import simbigraph.stat.algorithms.subgraph.RandMSF4DirParallel.EdgeLayerParameters;
+import simbigraph.stat.algorithms.subgraph.RandMSF4DirParallel.VertexLayerParameters;
 
 /**
      * @author Yudina Maria, Yudin Evgeniy
  */
-public class DirFourSizeSubgraphsCounterSampling<V, E> {
+public class RandMSF4Dir<V, E> {
 	//int mass[]=new int [300];
 	private Graph<V, E> graph;
 	
@@ -30,7 +30,7 @@ public class DirFourSizeSubgraphsCounterSampling<V, E> {
 	 * @param vertexLayers layers of the vertices
 	 * @param edgeLayers layers of the edges
 	 */
-	public DirFourSizeSubgraphsCounterSampling(Hypergraph<V, E> graph, Map<Integer, VertexLayerParameters<V>> vertexLayers, Map<Integer, EdgeLayerParameters<E>> edgeLayers) {
+	public RandMSF4Dir(Hypergraph<V, E> graph, Map<Integer, VertexLayerParameters<V>> vertexLayers, Map<Integer, EdgeLayerParameters<E>> edgeLayers) {
         this.graph = (Graph<V, E>) graph;
         this.vertexLayers = vertexLayers;
         this.edgeLayers = edgeLayers;
