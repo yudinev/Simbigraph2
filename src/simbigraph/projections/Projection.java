@@ -18,8 +18,7 @@ import simbigraph.core.SimgraphNode;
 import simbigraph.core.Simulation;
 import simbigraph.engine.SimState;
 import simbigraph.engine.Steppable;
-import texts.GetText;
-
+import text.GetText;
 import edu.uci.ics.jung.graph.Graph;
 /**
  * 

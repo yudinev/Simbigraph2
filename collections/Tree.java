@@ -1,4 +1,4 @@
-package repast.simphony.util.collections;
+package collections;
 
 import java.util.Collection;
 import java.util.Comparator;

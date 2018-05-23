@@ -15,6 +15,7 @@ import edu.uci.ics.jung.graph.UndirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
 import edu.uci.ics.jung.io.PajekNetReader;
+import simbigraph.util.Statistic;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,8 +33,6 @@ import java.util.Set;
 
 import org.apache.commons.collections15.Factory;
 import org.jfree.data.statistics.Statistics;
-
-import simbigraph.util.Statistic;
 
 public class GeneratorClastPA4<V, E> {
 

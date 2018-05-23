@@ -443,6 +443,7 @@ public class GraphModelingPanel extends SimControlPanel {
 			});
 			save.add(Box.createVerticalStrut(5));
 			save.add(btn2);
+			
 			save.add(Box.createVerticalStrut(5));
 			JButton btn3 = new JButton("  Metric prop.   ");
 			btn3.addActionListener(new ActionListener() {
@@ -468,7 +469,17 @@ public class GraphModelingPanel extends SimControlPanel {
 				}
 				
 			});
+			
+			JButton buttonCommunity = new JButton("   buttonCommunity  ");
+			buttonCommunity.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+				
+				System.out.println(graph);
+				}
+			});
+			save.add(buttonCommunity);
 
+			
 			Dimension space = new Dimension(20, 20);
 			Box controls = Box.createVerticalBox();
 			// controls.add(Box.createRigidArea(space));
@@ -767,6 +778,10 @@ public class GraphModelingPanel extends SimControlPanel {
 				}
 			}
 		});
+		
+		
+		
+
 
 
 		JPanel calcPanel= new JPanel();
@@ -875,7 +890,7 @@ public class GraphModelingPanel extends SimControlPanel {
 		func.add(compare);
 		func.add(buttonSave);
 		func.add(buttonBigComponent);
-		
+
 
 		box.add(func);
 		controls.add(box);

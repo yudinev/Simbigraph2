@@ -6,13 +6,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
-import simbigraph.util.Statistic;
-
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseGraph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uci.ics.jung.graph.UndirectedSparseMultigraph;
+import simbigraph.util.Statistic;
 
 
 public class TestBA_R3 {

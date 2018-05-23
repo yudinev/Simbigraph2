@@ -39,7 +39,7 @@ import simbigraph.grid.views.panels2d.Abstract2DPanel;
 import simbigraph.grid.views.panels2d.HexaPanel;
 import simbigraph.grid.views.panels2d.SquarePanel;
 import simbigraph.projections.Projection;
-import texts.GetText;
+import text.GetText;
 
 public class MainGrid3D extends SimControlPanel {
 	Abstract3DPanel pan;

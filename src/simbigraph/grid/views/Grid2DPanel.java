@@ -40,7 +40,7 @@ import simbigraph.grid.views.panels2d.HexaPanel;
 import simbigraph.grid.views.panels2d.SquarePanel;
 import simbigraph.grid.views.panels2d.TrianglePanel;
 import simbigraph.projections.Projection;
-import texts.GetText;
+import text.GetText;
 
 public class Grid2DPanel extends SimControlPanel {
 	Abstract2DPanel pan;

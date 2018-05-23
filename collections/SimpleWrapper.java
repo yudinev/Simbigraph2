@@ -1,5 +1,5 @@
 /*CopyrightHere*/
-package repast.simphony.util.collections;
+package collections;
 
 
 /**

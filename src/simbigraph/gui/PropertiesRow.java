@@ -52,7 +52,6 @@ import simbigraph.projections.ProjGraphPA;
 import simbigraph.projections.Projection;
 import simbigraph.util.Statistic;
 import temp.CubeInteractionSimulation;
-
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.Hypergraph;
 import edu.uci.ics.jung.graph.SparseGraph;

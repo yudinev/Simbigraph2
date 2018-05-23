@@ -1,4 +1,4 @@
-package repast.simphony.util.collections;
+package collections;
 
 import org.apache.commons.collections15.Predicate;
 

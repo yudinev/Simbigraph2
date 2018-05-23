@@ -1,4 +1,4 @@
-package repast.simphony.util.collections;
+package collections;
 
 /**
  * An iterable that also provides indexed access to the underlying collection.

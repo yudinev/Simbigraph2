@@ -1,4 +1,4 @@
-package repast.simphony.util.collections;
+package collections;
 
 /**
  * Interface for a functor type object that is executed against nodes in a Tree.

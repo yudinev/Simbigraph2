@@ -8,7 +8,7 @@ import simbigraph.delaune.DelaunaeGraphPanel;
 import simbigraph.delaune.DelauneyPanel;
 import simbigraph.grid.pseudogrid.PseudoLatticePanel;
 import simbigraph.grid.views.Grid2DPanel;
-import texts.GetText;
+import text.GetText;
 
 public class PseudoLatticeProjection extends Projection {
 	private PseudoLatticePanel panel; 

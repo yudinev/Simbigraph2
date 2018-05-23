@@ -13,7 +13,7 @@ import simbigraph.core.Simulation;
 import simbigraph.engine.SimState;
 import simbigraph.graphs.prefAttachment.PrefferentialAttachment;
 import simbigraph.graphs.views.GraphModelingPanel;
-import texts.GetText;
+import text.GetText;
 
 
 public class PAttachStohasticGraphProjection extends ProjGraphPA

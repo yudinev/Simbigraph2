@@ -15,8 +15,7 @@ import simbigraph.grid.model.MultiOccupancyCellAccessor;
 import simbigraph.grid.model.WrapAroundBorders;
 import simbigraph.grid.views.Grid2DPanel;
 import simbigraph.grid.views.MainGrid3D;
-import texts.GetText;
-//import simbigraph.grid.views.SimulationInYan;
+import text.GetText;
 
 
 /**

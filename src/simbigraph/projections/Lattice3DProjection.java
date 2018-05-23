@@ -12,7 +12,7 @@ import simbigraph.grid.model.Grid;
 import simbigraph.grid.model.MultiOccupancyCellAccessor;
 import simbigraph.grid.model.WrapAroundBorders;
 import simbigraph.grid.views.MainGrid3D;
-import texts.GetText;
+import text.GetText;
 
 
 public class Lattice3DProjection extends Projection

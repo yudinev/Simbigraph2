@@ -13,6 +13,7 @@ import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.UndirectedSparseMultigraph;
 import edu.uci.ics.jung.graph.util.EdgeType;
 import edu.uci.ics.jung.graph.util.Pair;
+import simbigraph.util.Statistic;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,8 +29,6 @@ import java.util.Set;
 
 import org.apache.commons.collections15.Factory;
 import org.jfree.data.statistics.Statistics;
-
-import simbigraph.util.Statistic;
 
 public class GeneratorClastPA2<V, E> {
 

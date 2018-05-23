@@ -1,4 +1,4 @@
-package texts;
+package text;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -19,9 +19,9 @@ public static String getText(String filename){
     InputStream is= null;
 	try {
 		Class cl = MainFrame.class;
-		URL url =cl.getResource("/texts/"+filename+".txt");
+		URL url =cl.getResource("/text/"+filename+".txt");
 		
-		is = cl.getResourceAsStream("/texts/"+filename+".txt");
+		is = cl.getResourceAsStream("/text/"+filename+".txt");
 		
         BufferedReader in = null;
 			in = new BufferedReader(new InputStreamReader(is));

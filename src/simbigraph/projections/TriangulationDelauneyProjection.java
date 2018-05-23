@@ -5,7 +5,7 @@ import java.awt.Component;
 import simbigraph.delaune.DelaunaeGraphPanel;
 import simbigraph.delaune.DelauneyPanel;
 import simbigraph.grid.views.Grid2DPanel;
-import texts.GetText;
+import text.GetText;
 
 public class TriangulationDelauneyProjection extends Projection {
 	private DelauneyPanel panel; 
