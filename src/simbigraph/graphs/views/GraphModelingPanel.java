@@ -470,13 +470,14 @@ public class GraphModelingPanel extends SimControlPanel {
 				
 			});
 			
-			JButton buttonCommunity = new JButton("   buttonCommunity  ");
+			JButton buttonCommunity = new JButton("  Communities  ");
 			buttonCommunity.addActionListener(new ActionListener() {
+				@Override
 				public void actionPerformed(ActionEvent e) {
-				
-				System.out.println(graph);
+					System.out.println(graph);
 				}
 			});
+			save.add(Box.createVerticalStrut(5));
 			save.add(buttonCommunity);
 
 			
@@ -595,8 +596,7 @@ public class GraphModelingPanel extends SimControlPanel {
 		jButtonPropertyValue.setPreferredSize(new Dimension(25, 25));
 		jButtonPropertyValue
 				.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(
-							java.awt.event.ActionEvent evt) {
+					public void actionPerformed(ActionEvent evt) {
 						jFileChooserValueActionPerformed(evt);
 					}
 					private void jFileChooserValueActionPerformed(
@@ -638,7 +638,7 @@ public class GraphModelingPanel extends SimControlPanel {
 		compare.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// вставить предыдущие графики
+				// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 				PajekNetReader<Graph<Object, Integer>, Object, Integer> pnr;
 				Graph<Object, Integer> graph2 =new SparseMultigraph();
 
@@ -676,7 +676,7 @@ public class GraphModelingPanel extends SimControlPanel {
 				for (int i = 0; i < Q_.length; i++)
 					series2.add((double) i, (double) Q_[i]);
 				listSeries.add(series2);
-				//удалить все, серии, а потом вставить все 
+				//пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅ, пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ 
 				dataset.removeAllSeries();
 				for(XYSeries series:listSeries)
 					dataset.addSeries(series);
@@ -727,7 +727,7 @@ public class GraphModelingPanel extends SimControlPanel {
 				 Set ost = new HashSet();
 				for (Iterator iterator = set.iterator(); iterator.hasNext();) {
 					Set<Object> set2 = (Set<Object>) iterator.next();
-					System.out.println("кластер"+(i++)+" :"+set2.size());
+					System.out.println("пїЅпїЅпїЅпїЅпїЅпїЅпїЅ"+(i++)+" :"+set2.size());
 					if(set2.size()>max){max=set2.size(); ost = set2;}
 					
 				}
@@ -843,7 +843,7 @@ public class GraphModelingPanel extends SimControlPanel {
 				//	System.out.println(files[i]);
 				int count =(Integer)jSpinnerCount.getValue();
 				Motif3 m3= new Motif3(count, Context.getGraph());
-				jTextPaneConsole.append("Вершин "+m3.graph.getVertexCount()+" ребер "+m3.graph.getEdgeCount());
+				jTextPaneConsole.append("пїЅпїЅпїЅпїЅпїЅпїЅ "+m3.graph.getVertexCount()+" пїЅпїЅпїЅпїЅпїЅ "+m3.graph.getEdgeCount());
 				jTextPaneConsole.append("\nMotifs for 3 verticies");
 				jTextPaneConsole.append("\nn_treug "+m3.n_treug*3/(double)m3.iterations);
 				jTextPaneConsole.append("\nn_vilks "+m3.n_vilks/(double)m3.iterations);
@@ -964,7 +964,7 @@ public class GraphModelingPanel extends SimControlPanel {
 		gen.evolveGraph(evolvingSteps);
 		Graph graph = gen.create();
 		Context.setGraph(graph);
-		System.out.println("переделанный");
+		System.out.println("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ");
 		System.out.println("Nodes num =" + graph.getVertexCount());
 		System.out.println("Edges num =" + graph.getEdgeCount());
 	}
