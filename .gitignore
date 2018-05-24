@@ -126,6 +126,13 @@ Thumbs.db
 # Folder config file
 Desktop.ini
 
+#############
+## Java
+#############
+
+# Idea files
+*.idea*
+
 
 #############
 ## Python
