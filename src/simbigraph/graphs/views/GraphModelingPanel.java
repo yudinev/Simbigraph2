@@ -526,7 +526,7 @@ public class GraphModelingPanel extends SimControlPanel {
 		validate();
 	}
 	final List<XYSeries> listSeries = new ArrayList<XYSeries>();
-
+//
 	protected JPanel createChartPanel() {
 		JPanel pan = new JPanel();
 		pan.setLayout(new BorderLayout());
