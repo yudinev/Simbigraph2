@@ -450,7 +450,7 @@ public class GraphModelingPanel extends SimControlPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					JDialog mDialog= new MetricsDialog();
+					JDialog mDialog = new MetricsDialog();
 					mDialog.setVisible(true);
 				}
 				
@@ -464,7 +464,7 @@ public class GraphModelingPanel extends SimControlPanel {
 
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					JDialog mDialog= new MotifsDialog();
+					JDialog mDialog = new MotifsDialog();
 					mDialog.setVisible(true);
 				}
 				
@@ -474,7 +474,8 @@ public class GraphModelingPanel extends SimControlPanel {
 			buttonCommunity.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					System.out.println(graph);
+					JDialog communitiesDialog = new CommunitiesDialog();
+					communitiesDialog.setVisible(true);
 				}
 			});
 			save.add(Box.createVerticalStrut(5));
