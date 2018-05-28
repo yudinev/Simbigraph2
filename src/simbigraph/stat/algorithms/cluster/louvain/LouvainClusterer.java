@@ -223,7 +223,7 @@ public class LouvainClusterer implements Cloneable {
         init_cluster();
     }
 
-    public Set<Set<Number>> louvain() {
+    public Set<Set<Number>> start() {
         init_cluster();
         int count = 0;
         boolean update_flag;
