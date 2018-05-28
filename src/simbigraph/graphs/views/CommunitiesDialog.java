@@ -1,17 +1,18 @@
 package simbigraph.graphs.views;
 
-import edu.uci.ics.jung.algorithms.layout.AggregateLayout;
-import edu.uci.ics.jung.algorithms.layout.CircleLayout;
-import edu.uci.ics.jung.algorithms.layout.FRLayout;
-import edu.uci.ics.jung.algorithms.layout.Layout;
+import edu.uci.ics.jung.algorithms.layout.*;
+import edu.uci.ics.jung.algorithms.layout.SpringLayout;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
+import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
+import edu.uci.ics.jung.visualization.control.ScalingGraphMousePlugin;
 import org.apache.commons.collections15.Transformer;
 import org.jfree.ui.tabbedui.VerticalLayout;
 import simbigraph.core.Context;
+import simbigraph.graphs.neighborhood.XYLayout;
 import simbigraph.stat.algorithms.cluster.louvain.Edge;
 import simbigraph.stat.algorithms.cluster.louvain.FormatConverter;
 import simbigraph.stat.algorithms.cluster.louvain.LouvainClusterer;
@@ -35,7 +36,11 @@ import com.google.common.cache.LoadingCache;
 import com.google.common.base.Functions;
 
 public class CommunitiesDialog extends JDialog {
-    public static final int LARGE_GRAPH_NODES_COUNT = 50;
+    public static final int LARGE_GRAPH_NODES_COUNT = 100;
+    public static final int CIRCLE_LAYOUT_SCALE = 10;
+    public static final double coeff = Math.log10(Context.getGraph().getVertexCount());
+    public static final double VIEWER_WIDTH  = Context.getGraph().getVertexCount() * CIRCLE_LAYOUT_SCALE * coeff; // + 500.0;
+    public static final double VIEWER_HEIGHT = VIEWER_WIDTH;
     private final JPanel contentPanel = new JPanel();
     JRadioButton betweennessMethod;
     JRadioButton louvainMethod;
@@ -121,15 +126,21 @@ public class CommunitiesDialog extends JDialog {
                 Graph g = Context.getGraph();
 
                 int outputResultMethod = -1;
-                if(g.getVertexCount() >= LARGE_GRAPH_NODES_COUNT) {
-                    outputResultMethod = JOptionPane.showConfirmDialog(contentPanel, "Graph contains " + g.getVertexCount() + " nodes (equal or more than maximum of " + LARGE_GRAPH_NODES_COUNT + " nodes), maybe result of clustering don't visualize, but output to file?","Graph too large", JOptionPane.YES_NO_OPTION);
+                if (g.getVertexCount() >= LARGE_GRAPH_NODES_COUNT) {
+                    outputResultMethod = JOptionPane.showConfirmDialog(contentPanel, "Graph contains " + g.getVertexCount() + " nodes (equal or more than maximum of " + LARGE_GRAPH_NODES_COUNT + " nodes), maybe result of clustering don't visualize, but output to file?", "Graph too large", JOptionPane.YES_NO_OPTION);
+                } else {
+                    FormatConverter fc = new FormatConverter<Number>();
+                    AggregateLayout<Number, Number> layout = configureLayout(fc.convertToPajekFormat(g));
+                    setLayout(layout);
+                    Set<Set<Number>> communities = startClustering(g);
+                    visualize(fc.convertToPajekFormat(g), communities, layout);
                 }
 
                 Set<Set<Number>> communities = startClustering(g);
 
-                System.out.println(communities);
+                System.out.println("Communities: " + communities);
 
-                switch(outputResultMethod) {
+                switch (outputResultMethod) {
                     case JOptionPane.YES_OPTION:
                         FormatConverter fc = new FormatConverter<Number>();
                         AggregateLayout<Number, Number> layout = configureLayout(fc.convertToPajekFormat(g));
@@ -148,18 +159,18 @@ public class CommunitiesDialog extends JDialog {
     }
 
     private Set<Set<Number>> startClustering(Graph g) {
-        if(louvainMethod.isSelected()) {
+        if (louvainMethod.isSelected()) {
             LouvainClusterer lv = new LouvainClusterer();
             FormatConverter fc = new FormatConverter<Number>();
             Edge[] edges = fc.convertToEdgeFormat(g);
 
-            lv.init(edges, g.getVertexCount(), 3); //10
+            lv.init(edges, g.getVertexCount(), 5); //10
             Set<Set<Number>> s = lv.louvain();
 
             return s;
         }
 
-        if(betweennessMethod.isSelected()) {
+        if (betweennessMethod.isSelected()) {
             return null;
         }
 
@@ -216,7 +227,11 @@ public class CommunitiesDialog extends JDialog {
         });
 
         DefaultModalGraphMouse<Number, Number> gm = new DefaultModalGraphMouse();
+        gm.add(new ScalingGraphMousePlugin(new CrossoverScalingControl(), 0, 0.9f, 1.1f));
+        this.vv.setPreferredSize(new Dimension(500, 500));
         this.vv.setGraphMouse(gm);
+        this.vv.setAutoscrolls(true);
+        this.vv.fireStateChanged();
     }
 
     private void addViewer(JPanel panel) {
@@ -239,7 +254,44 @@ public class CommunitiesDialog extends JDialog {
 
     private void groupCluster(AggregateLayout<Number, Number> layout, Set<Number> vertices) {
         if (vertices.size() < layout.getGraph().getVertexCount()) {
-            Point2D center = layout.transform(vertices.iterator().next()); // apply(vertices.iterator().next());
+            // Point2D center = layout.transform(vertices.iterator().next()); // apply(vertices.iterator().next());
+
+            Point2D center;
+            Random r = new Random();
+            boolean suc = false;
+            int changes = 0;
+            int max_changes = 20;
+
+            do {
+                int k = 0;
+                /*center = new Point((int) (r.nextInt((int)VIEWER_WIDTH)  - VIEWER_WIDTH  / 2.0),
+                                   (int) (r.nextInt((int)VIEWER_HEIGHT) - VIEWER_HEIGHT / 2.0));*/
+                center = new Point(r.nextInt((int)VIEWER_WIDTH), r.nextInt((int)VIEWER_HEIGHT));
+                /*center = new Point(r.nextInt(layout.getSize().width  - vertices.size() * CIRCLE_LAYOUT_SCALE),
+                                   r.nextInt(layout.getSize().height - vertices.size() * CIRCLE_LAYOUT_SCALE));*/
+
+                Iterator lt = layout.getLayouts().keySet().iterator();
+                while(lt.hasNext()) {
+                    Layout l = (Layout)lt.next();
+                    Point2D p = layout.get(l);
+                    double r1 = l.getGraph().getVertexCount() * CIRCLE_LAYOUT_SCALE;
+                    double r2 = vertices.size() * CIRCLE_LAYOUT_SCALE;
+                    double x = p.getX() - center.getX();
+                    double y = p.getY() - center.getY();
+                    if(Math.sqrt(x*x + y*y) > (r1 + r2) * (Context.getGraph().getVertices().size() / 100.0)) {
+                        ++k;
+                    }
+                }
+
+                ++changes;
+
+                if(k == layout.getLayouts().size() || ++changes > max_changes) {
+                    suc = true;
+                }
+
+            } while(!suc);
+
+            center.setLocation(center.getX(), center.getY());
             Graph<Number, Number> subGraph = (Graph) SparseMultigraph.getFactory().create(); // get();
             Iterator var5 = vertices.iterator();
 
@@ -248,9 +300,11 @@ public class CommunitiesDialog extends JDialog {
                 subGraph.addVertex(v);
             }
 
-            Layout<Number, Number> subLayout = new CircleLayout(subGraph);
+            Layout<Number, Number> subLayout = new ISOMLayout(subGraph); // new CircleLayout(subGraph);
+
             subLayout.setInitializer(this.vv.getGraphLayout());
-            subLayout.setSize(new Dimension(vertices.size()*10, vertices.size()*10));
+            subLayout.setSize(new Dimension(vertices.size() * CIRCLE_LAYOUT_SCALE * 2,
+                                            vertices.size() * CIRCLE_LAYOUT_SCALE * 2));
             layout.put(subLayout, center);
             this.vv.repaint();
         }
@@ -264,11 +318,11 @@ public class CommunitiesDialog extends JDialog {
 
         int i = 0;
         Iterator cIt;
-        for(cIt = clSet.iterator(); cIt.hasNext(); ++i) {
+        for (cIt = clSet.iterator(); cIt.hasNext(); ++i) {
             Set<Number> vertices = (Set) cIt.next();
             Color c = new Color(r.nextInt(255), r.nextInt(255), r.nextInt(255));
             colorCluster(vertices, c);
-            if(groupClusters) {
+            if (groupClusters) {
                 groupCluster(layout, vertices);
             }
         }
