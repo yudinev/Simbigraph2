@@ -23,6 +23,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.Point2D;
+import java.io.FileWriter;
 import java.util.Iterator;
 import java.util.Random;
 import java.util.Set;
@@ -40,6 +41,9 @@ public class CommunitiesDialog extends JDialog {
     public static final double coeff = Math.log10(Context.getGraph().getVertexCount());
     public static final double VIEWER_WIDTH  = Context.getGraph().getVertexCount() * CIRCLE_LAYOUT_SCALE * coeff; // + 500.0;
     public static final double VIEWER_HEIGHT = VIEWER_WIDTH;
+
+    private Set<Set<Number>> communities;
+
     private final JPanel contentPanel = new JPanel();
     JRadioButton betweennessMethod;
     JRadioButton louvainMethod;
@@ -56,6 +60,14 @@ public class CommunitiesDialog extends JDialog {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private void setCommunities(Set<Set<Number>> communities) {
+        this.communities = communities;
+    }
+
+    private Set<Set<Number>> getCommunities() {
+        return this.communities;
     }
 
     public CommunitiesDialog() {
@@ -143,6 +155,8 @@ public class CommunitiesDialog extends JDialog {
 
                 switch (outputResultMethod) {
                     case JOptionPane.YES_OPTION:
+                        saveResult();
+                        break;
                     case JOptionPane.NO_OPTION:
                         FormatConverter fc = new FormatConverter<Number>();
                         AggregateLayout<Number, Number> layout = configureLayout(fc.convertToPajekFormat(g));
@@ -194,6 +208,20 @@ public class CommunitiesDialog extends JDialog {
         }
 
         return largeGraphNodesCount;
+    }
+
+    private void saveResult() {
+        JFileChooser saveFile = new JFileChooser();
+        int retrieval = saveFile.showSaveDialog(getContentPane());
+        if(retrieval == JFileChooser.APPROVE_OPTION) {
+            try {
+                FileWriter fw = new FileWriter(saveFile.getSelectedFile() + ".txt");
+                fw.write(getCommunities().toString());
+                fw.close();
+            } catch(Exception ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
     // ---
