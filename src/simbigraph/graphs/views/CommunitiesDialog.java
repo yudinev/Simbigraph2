@@ -45,6 +45,7 @@ public class CommunitiesDialog extends JDialog {
     private Set<Set<Number>> communities;
 
     private final JPanel contentPanel = new JPanel();
+    private final JButton saveButton;
     JRadioButton betweennessMethod;
     JRadioButton louvainMethod;
 
@@ -92,18 +93,19 @@ public class CommunitiesDialog extends JDialog {
         JPanel panel = new JPanel();
         panel.setBorder(new TitledBorder(UIManager.getBorder("TitledBorder.border"), "Choose algorithm", TitledBorder.LEADING, TitledBorder.TOP, null, Color.BLACK));
         //panel.setBounds(29, 22, 658, 114);
-        contentPanel.add(BorderLayout.WEST, panel);
-        contentPanel.add(BorderLayout.WEST, Box.createVerticalGlue());
+        contentPanel.add(panel);
+        //contentPanel.add(BorderLayout.WEST, Box.createVerticalGlue());
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 
         betweennessMethod = new JRadioButton("Betweenness");
         betweennessMethod.setSelected(true);
-        //betweennessMethod.setBounds(82, 43, 156, 23);
-        panel.add(betweennessMethod);
 
         louvainMethod = new JRadioButton("Louvain");
-        //louvainMethod.setBounds(82, 69, 156, 23);
-        panel.add(louvainMethod);
+
+        JPanel radioPanel = new JPanel();
+        radioPanel.setLayout(new VerticalLayout());
+        radioPanel.add(BorderLayout.WEST, betweennessMethod);
+        radioPanel.add(louvainMethod);
 
         ButtonGroup group = new ButtonGroup();
         group.add(betweennessMethod);
@@ -113,9 +115,33 @@ public class CommunitiesDialog extends JDialog {
         //startButton.setBounds(527, 57, 100, 25);
         //panel.add(Box.createHorizontalStrut(100));
         //panel.add(BorderLayout.CENTER, startButton);
-        panel.add(BorderLayout.CENTER, Box.createHorizontalBox().add(startButton));
+        JPanel buttonsPanel = new JPanel();
+        buttonsPanel.setLayout(new BoxLayout(buttonsPanel, BoxLayout.X_AXIS));
+        buttonsPanel.add(BorderLayout.WEST, startButton);
+
+        //panel.add(BorderLayout.CENTER, Box.createHorizontalBox().add(startButton));
         //startButton.setActionCommand("Cancel");
 
+        saveButton = new JButton("Save");
+        saveButton.setEnabled(false);
+
+        saveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveResult();
+            }
+        });
+
+        /*panel.add(Box.createVerticalStrut(5));
+        panel.add(BorderLayout.EAST, Box.createVerticalBox().add(saveButton));*/
+        buttonsPanel.add(Box.createHorizontalStrut(3));
+        buttonsPanel.add(saveButton);
+
+        radioPanel.add(Box.createHorizontalGlue());
+        panel.add(radioPanel);
+
+        buttonsPanel.add(Box.createHorizontalGlue());
+        panel.add(buttonsPanel);
         panel.setBounds(0, 0, 120, 100);
 
         JPanel clusteringResult = new JPanel();
@@ -135,6 +161,8 @@ public class CommunitiesDialog extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 Graph g = Context.getGraph();
+
+                saveButton.setEnabled(true);
 
                 int outputResultMethod = -1;
                 int largeGraphNodesCount = getNodesCountForLargeGraph();
