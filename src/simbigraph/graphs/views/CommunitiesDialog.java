@@ -1,7 +1,6 @@
 package simbigraph.graphs.views;
 
 import edu.uci.ics.jung.algorithms.layout.*;
-import edu.uci.ics.jung.algorithms.layout.SpringLayout;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
@@ -12,13 +11,12 @@ import edu.uci.ics.jung.visualization.control.ScalingGraphMousePlugin;
 import org.apache.commons.collections15.Transformer;
 import org.jfree.ui.tabbedui.VerticalLayout;
 import simbigraph.core.Context;
-import simbigraph.graphs.neighborhood.XYLayout;
+import simbigraph.stat.algorithms.cluster.betweenness.BetweennessClusterer;
 import simbigraph.stat.algorithms.cluster.louvain.Edge;
 import simbigraph.stat.algorithms.cluster.louvain.FormatConverter;
 import simbigraph.stat.algorithms.cluster.louvain.LouvainClusterer;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
@@ -36,7 +34,8 @@ import com.google.common.cache.LoadingCache;
 import com.google.common.base.Functions;
 
 public class CommunitiesDialog extends JDialog {
-    public static final int LARGE_GRAPH_NODES_COUNT = 100;
+    public static final int BETWEENNESS_LARGE_GRAPH_NODES_COUNT = 20;
+    public static final int LOUVAIN_LARGE_GRAPH_NODES_COUNT = 100;
     public static final int CIRCLE_LAYOUT_SCALE = 10;
     public static final double coeff = Math.log10(Context.getGraph().getVertexCount());
     public static final double VIEWER_WIDTH  = Context.getGraph().getVertexCount() * CIRCLE_LAYOUT_SCALE * coeff; // + 500.0;
@@ -126,8 +125,10 @@ public class CommunitiesDialog extends JDialog {
                 Graph g = Context.getGraph();
 
                 int outputResultMethod = -1;
-                if (g.getVertexCount() >= LARGE_GRAPH_NODES_COUNT) {
-                    outputResultMethod = JOptionPane.showConfirmDialog(contentPanel, "Graph contains " + g.getVertexCount() + " nodes (equal or more than maximum of " + LARGE_GRAPH_NODES_COUNT + " nodes), maybe result of clustering don't visualize, but output to file?", "Graph too large", JOptionPane.YES_NO_OPTION);
+                int largeGraphNodesCount = getNodesCountForLargeGraph();
+                if (g.getVertexCount() >= largeGraphNodesCount) {
+                    outputResultMethod = JOptionPane.showConfirmDialog(contentPanel,
+                            "Graph contains " + g.getVertexCount() + " nodes (equal or more than maximum of " + largeGraphNodesCount + " nodes), maybe result of clustering don't visualize, but output to file?", "Graph too large", JOptionPane.YES_NO_OPTION);
                 } else {
                     FormatConverter fc = new FormatConverter<Number>();
                     AggregateLayout<Number, Number> layout = configureLayout(fc.convertToPajekFormat(g));
@@ -142,12 +143,11 @@ public class CommunitiesDialog extends JDialog {
 
                 switch (outputResultMethod) {
                     case JOptionPane.YES_OPTION:
+                    case JOptionPane.NO_OPTION:
                         FormatConverter fc = new FormatConverter<Number>();
                         AggregateLayout<Number, Number> layout = configureLayout(fc.convertToPajekFormat(g));
                         setLayout(layout);
                         visualize(fc.convertToPajekFormat(g), communities, layout);
-                        break;
-                    case JOptionPane.NO_OPTION:
                         break;
                     case JOptionPane.DEFAULT_OPTION:
                     default:
@@ -158,23 +158,42 @@ public class CommunitiesDialog extends JDialog {
         });
     }
 
-    private Set<Set<Number>> startClustering(Graph g) {
+    private Set<Set<Number>> startClustering(Graph graph) {
+        FormatConverter fc = new FormatConverter<Number>();
+
+        Set<Set<Number>> communities = null;
+
         if (louvainMethod.isSelected()) {
             LouvainClusterer lv = new LouvainClusterer();
-            FormatConverter fc = new FormatConverter<Number>();
-            Edge[] edges = fc.convertToEdgeFormat(g);
+            Edge[] edges = fc.convertToEdgeFormat(graph);
 
-            lv.init(edges, g.getVertexCount(), 5); //10
-            Set<Set<Number>> s = lv.louvain();
+            lv.init(edges, graph.getVertexCount(), 5); //10
 
-            return s;
+            communities = lv.start();
         }
 
         if (betweennessMethod.isSelected()) {
-            return null;
+            Graph g = fc.convertToPajekFormat(graph);
+            BetweennessClusterer bc = new BetweennessClusterer(g);
+            communities = bc.start(g);
         }
 
-        return null;
+        setCommunities(communities);
+        return communities;
+    }
+
+    private int getNodesCountForLargeGraph() {
+        int largeGraphNodesCount = 50;
+
+        if (louvainMethod.isSelected()) {
+            largeGraphNodesCount = LOUVAIN_LARGE_GRAPH_NODES_COUNT;
+        }
+
+        if (betweennessMethod.isSelected()) {
+            largeGraphNodesCount = BETWEENNESS_LARGE_GRAPH_NODES_COUNT;
+        }
+
+        return largeGraphNodesCount;
     }
 
     // ---
