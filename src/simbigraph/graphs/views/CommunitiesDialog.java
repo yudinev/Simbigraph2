@@ -1,13 +1,11 @@
 package simbigraph.graphs.views;
 
-import com.google.common.base.Function;
 import edu.uci.ics.jung.algorithms.layout.AggregateLayout;
 import edu.uci.ics.jung.algorithms.layout.CircleLayout;
 import edu.uci.ics.jung.algorithms.layout.FRLayout;
 import edu.uci.ics.jung.algorithms.layout.Layout;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
-import edu.uci.ics.jung.graph.UndirectedGraph;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
@@ -111,8 +109,11 @@ public class CommunitiesDialog extends JDialog {
 
         FormatConverter fc = new FormatConverter<Number>();
 
-        //configurePrint(fc.convertToPajekFormat(new UndirectedSparseGraph()), clusteringResult);
-        AggregateLayout<Number, Number> layout = configurePrint(fc.convertToPajekFormat(Context.getGraph()), clusteringResult);
+        // configureLayout(fc.convertToPajekFormat(new UndirectedSparseGraph()), clusteringResult);
+
+        AggregateLayout<Number, Number> layout = configureLayout(fc.convertToPajekFormat(new UndirectedSparseGraph()));
+        configureViewer(layout);
+        addViewer(clusteringResult);
 
         startButton.addActionListener(new ActionListener() {
             @Override
@@ -131,8 +132,9 @@ public class CommunitiesDialog extends JDialog {
                 switch(outputResultMethod) {
                     case JOptionPane.YES_OPTION:
                         FormatConverter fc = new FormatConverter<Number>();
-                        //AggregateLayout<Number, Number> layout = configurePrint(fc.convertToPajekFormat(Context.getGraph()), clusteringResult);
-                        visualizate(fc.convertToPajekFormat(g), communities, layout, clusteringResult);
+                        AggregateLayout<Number, Number> layout = configureLayout(fc.convertToPajekFormat(g));
+                        setLayout(layout);
+                        visualize(fc.convertToPajekFormat(g), communities, layout);
                         break;
                     case JOptionPane.NO_OPTION:
                         break;
@@ -157,16 +159,44 @@ public class CommunitiesDialog extends JDialog {
             return s;
         }
 
+        if(betweennessMethod.isSelected()) {
+            return null;
+        }
+
         return null;
     }
 
-    private AggregateLayout<Number, Number> configurePrint(Graph graph, JPanel panel) {
+    // ---
+
+    private AggregateLayout<Number, Number> configureLayout(Graph graph) {
+        // panel.removeAll();
         FRLayout frl = new FRLayout(graph);
         AggregateLayout<Number, Number> layout = new AggregateLayout(frl);
-        this.vv = new VisualizationViewer(layout);
 
-        //this.vv.setBackground(Color.white);
-        //this.vv.getRenderContext().setVertexFillPaintTransformer((Transformer<Number, Paint>) vertexPaints);
+        // this.vv.setBackground(Color.white);
+        // Random r = new Random();
+
+        // JPanel panel = new JPanel();
+
+        // add(panel, BorderLayout.SOUTH);
+        // panel.setSize(400, 300);
+
+        return layout;
+    }
+
+    private void setLayout(AggregateLayout<Number, Number> layout) {
+        //this.vv = new VisualizationViewer(layout);
+        vv.setGraphLayout(layout);
+    }
+
+    private void configureViewer(AggregateLayout<Number, Number> layout) {
+        this.vv = new VisualizationViewer(layout);
+        //vv.setGraphLayout(layout);
+
+        Random r = new Random();
+
+        // this.vv.setBackground(new Color(r.nextInt(255), r.nextInt(255), r.nextInt(255)));
+        // this.vv.getRenderContext().setVertexFillPaintTransformer((Transformer<Number, Paint>) vertexPaints);
         this.vv.getRenderContext().setVertexFillPaintTransformer(new Transformer<Number, Paint>() {
             public Paint transform(Number number) {
                 Random r = new Random();
@@ -187,25 +217,24 @@ public class CommunitiesDialog extends JDialog {
 
         DefaultModalGraphMouse<Number, Number> gm = new DefaultModalGraphMouse();
         this.vv.setGraphMouse(gm);
+    }
 
-        //JPanel panel = new JPanel();
-
-        //add(panel, BorderLayout.SOUTH);
-        //panel.setSize(400, 300);
+    private void addViewer(JPanel panel) {
+        panel.removeAll();
 
         panel.setLayout(new BorderLayout());
 
-        panel.add(vv);
+        panel.add(this.vv);
         panel.setVisible(true);
-
-        return layout;
     }
 
-    private void visualizate(Graph graph, Set<Set<Number>> communities, AggregateLayout<Number, Number> layout, JPanel panel) {
+    // ---
+
+    private void visualize(Graph graph, Set<Set<Number>> communities, AggregateLayout<Number, Number> layout) {
 
         //contentPanel.add(panel);
 
-        recolor(layout, communities, true);
+        recolor(graph, layout, communities, true);
     }
 
     private void groupCluster(AggregateLayout<Number, Number> layout, Set<Number> vertices) {
@@ -227,9 +256,10 @@ public class CommunitiesDialog extends JDialog {
         }
     }
 
-    public void recolor(AggregateLayout<Number, Number> layout, Set<Set<Number>> clSet, boolean groupClusters) {
-        Graph<Number, Number> g = layout.getGraph();
+    public void recolor(Graph graph, AggregateLayout<Number, Number> layout, Set<Set<Number>> clSet, boolean groupClusters) {
+        Graph<Number, Number> g = graph; //layout.getGraph();
         layout.removeAll();
+        layout.setGraph(g);
         Random r = new Random();
 
         int i = 0;
