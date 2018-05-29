@@ -4,6 +4,7 @@ import edu.uci.ics.jung.algorithms.layout.*;
 import edu.uci.ics.jung.graph.Graph;
 import edu.uci.ics.jung.graph.SparseMultigraph;
 import edu.uci.ics.jung.graph.UndirectedSparseGraph;
+import edu.uci.ics.jung.io.PajekNetWriter;
 import edu.uci.ics.jung.visualization.VisualizationViewer;
 import edu.uci.ics.jung.visualization.control.CrossoverScalingControl;
 import edu.uci.ics.jung.visualization.control.DefaultModalGraphMouse;
@@ -112,7 +113,6 @@ public class CommunitiesDialog extends JDialog {
         group.add(louvainMethod);
 
         JButton startButton = new JButton("Clustering");
-        //startButton.setBounds(527, 57, 100, 25);
         //panel.add(Box.createHorizontalStrut(100));
         //panel.add(BorderLayout.CENTER, startButton);
         JPanel buttonsPanel = new JPanel();
@@ -122,18 +122,30 @@ public class CommunitiesDialog extends JDialog {
         //panel.add(BorderLayout.CENTER, Box.createHorizontalBox().add(startButton));
         //startButton.setActionCommand("Cancel");
 
-        saveButton = new JButton("Save");
+        JButton saveGraphButton = new JButton("Save graph");
+        saveGraphButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                saveGraph();
+            }
+        });
+
+        saveButton = new JButton("Save communities");
         saveButton.setEnabled(false);
 
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                saveResult();
+                saveCommunities();
             }
         });
 
         /*panel.add(Box.createVerticalStrut(5));
         panel.add(BorderLayout.EAST, Box.createVerticalBox().add(saveButton));*/
+
+        buttonsPanel.add(Box.createHorizontalStrut(3));
+        buttonsPanel.add(saveGraphButton);
+
         buttonsPanel.add(Box.createHorizontalStrut(3));
         buttonsPanel.add(saveButton);
 
@@ -183,7 +195,7 @@ public class CommunitiesDialog extends JDialog {
 
                 switch (outputResultMethod) {
                     case JOptionPane.YES_OPTION:
-                        saveResult();
+                        saveCommunities();
                         break;
                     case JOptionPane.NO_OPTION:
                         FormatConverter fc = new FormatConverter<Number>();
@@ -238,13 +250,29 @@ public class CommunitiesDialog extends JDialog {
         return largeGraphNodesCount;
     }
 
-    private void saveResult() {
+    private void saveCommunities() {
         JFileChooser saveFile = new JFileChooser();
         int retrieval = saveFile.showSaveDialog(getContentPane());
         if(retrieval == JFileChooser.APPROVE_OPTION) {
             try {
                 FileWriter fw = new FileWriter(saveFile.getSelectedFile() + ".txt");
                 fw.write(getCommunities().toString());
+                fw.close();
+            } catch(Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    private void saveGraph() {
+        Graph graph = new FormatConverter<>().convertToPajekFormat(Context.getGraph());
+
+        JFileChooser saveFile = new JFileChooser();
+        int retrieval = saveFile.showSaveDialog(getContentPane());
+        if(retrieval == JFileChooser.APPROVE_OPTION) {
+            try {
+                FileWriter fw = new FileWriter(saveFile.getSelectedFile() + ".net");
+                new PajekNetWriter().save(graph, fw);
                 fw.close();
             } catch(Exception ex) {
                 ex.printStackTrace();
