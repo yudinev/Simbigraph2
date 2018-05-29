@@ -42,8 +42,8 @@ public class BetweennessClusterer {
             Number v1 = (Number)v1It.next();
             for(Iterator v2It = graph.getVertices().iterator(); v2It.hasNext();) {
                 Number v2 = (Number)v2It.next();
-                if(v1 != v2)
-                    Q += ((graph.isNeighbor(v1, v2) ? 1.0 : 0.0) - (double)(graph.degree(v1) * graph.degree(v2)) / (2.0 * m)) * (sameCluster(communities, v1, v2) ? 1.0 : 0.0);
+
+                Q += ((graph.isNeighbor(v1, v2) ? 1.0 : 0.0) - (double)(graph.degree(v1) * graph.degree(v2)) / (2.0 * m)) * (sameCluster(communities, v1, v2) ? 1.0 : 0.0);
             }
         }
 
