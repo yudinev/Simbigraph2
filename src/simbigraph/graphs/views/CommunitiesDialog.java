@@ -252,6 +252,7 @@ public class CommunitiesDialog extends JDialog {
 
     private void saveCommunities() {
         JFileChooser saveFile = new JFileChooser();
+        saveFile.setDialogTitle("Save communities");
         int retrieval = saveFile.showSaveDialog(getContentPane());
         if(retrieval == JFileChooser.APPROVE_OPTION) {
             try {
@@ -268,6 +269,7 @@ public class CommunitiesDialog extends JDialog {
         Graph graph = new FormatConverter<>().convertToPajekFormat(Context.getGraph());
 
         JFileChooser saveFile = new JFileChooser();
+        saveFile.setDialogTitle("Save graph");
         int retrieval = saveFile.showSaveDialog(getContentPane());
         if(retrieval == JFileChooser.APPROVE_OPTION) {
             try {
