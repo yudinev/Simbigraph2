@@ -779,9 +779,15 @@ public class GraphModelingPanel extends SimControlPanel {
 				}
 			}
 		});
-		
-		
-		
+
+		JButton buttonCommunity = new JButton("  Communities  ");
+		buttonCommunity.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JDialog communitiesDialog = new CommunitiesDialog();
+				communitiesDialog.setVisible(true);
+			}
+		});
 
 
 
@@ -891,7 +897,7 @@ public class GraphModelingPanel extends SimControlPanel {
 		func.add(compare);
 		func.add(buttonSave);
 		func.add(buttonBigComponent);
-
+		func.add(buttonCommunity);
 
 		box.add(func);
 		controls.add(box);
