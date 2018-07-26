@@ -13,6 +13,9 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.TitledBorder;
+
+import com.sun.org.apache.bcel.internal.generic.NEW;
+
 import javax.swing.UIManager;
 import java.awt.Color;
 import javax.swing.JProgressBar;
@@ -28,7 +31,15 @@ public class MotifsDialog extends JDialog {
 
 	private final JPanel contentPanel = new JPanel();
 	private JSpinner spinner;
+	ActionListener runMotifs= new ActionListener() {
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			
+		}
+	};
 
+	
 	/**
 	 * Launch the application.
 	 */
@@ -104,13 +115,16 @@ public class MotifsDialog extends JDialog {
 		
 		JLabel lblTotalProgress = new JLabel("Total Progress");
 		lblTotalProgress.setBounds(85, 22, 87, 14);
+
 		panel_1.add(lblTotalProgress);
 		{
 			JButton runButton = new JButton("RUN");
 			runButton.setBounds(527, 57, 89, 23);
 			panel_1.add(runButton);
-			runButton.setActionCommand("Cancel");
+			runButton.addActionListener(runMotifs);
+			runButton.setActionCommand("Run");
 		}
+		
 		
 		JLabel lblNumberOfThreads = new JLabel("Number of threads");
 		lblNumberOfThreads.setBounds(54, 61, 118, 14);
@@ -150,7 +164,7 @@ public class MotifsDialog extends JDialog {
 		
 		JTextPane txtpnNetworkNameCemailemailnet = new JTextPane();
 		txtpnNetworkNameCemailemailnet.setFont(new Font("Tahoma", Font.PLAIN, 9));
-		txtpnNetworkNameCemailemailnet.setText("Network name: C:\\\\email\\Email.net\t\t\r\nNumber of nodes: 265215,\tNumber of edges: 364481\t\t\r\nNumber of single edges: 310006, Number of mutual edges: 54475\t\t\r\nSubgraphs:\r\nNA\r\nNA\r\nNA\r\n1,93466E+11\r\nNA\r\nNA\r\nNA\r\n6456245202\r\n13418424770\r\nNA\r\nNA\r\nNA\r\n572077970\r\n687418593\r\n17530533\r\nNA\r\n889540098\r\n14410349\r\n49462929\r\n2223607\r\n785055\r\n1078335\r\nNA\r\nNA\r\n776368511\r\n2299330646\r\n2531165883\r\nNA\r\nNA\r\n69159001");
+		//txtpnNetworkNameCemailemailnet.setText("Network name: C:\\\\email\\Email.net\t\t\r\nNumber of nodes: 265215,\tNumber of edges: 364481\t\t\r\nNumber of single edges: 310006, Number of mutual edges: 54475\t\t\r\nSubgraphs:\r\nNA\r\nNA\r\nNA\r\n1,93466E+11\r\nNA\r\nNA\r\nNA\r\n6456245202\r\n13418424770\r\nNA\r\nNA\r\nNA\r\n572077970\r\n687418593\r\n17530533\r\nNA\r\n889540098\r\n14410349\r\n49462929\r\n2223607\r\n785055\r\n1078335\r\nNA\r\nNA\r\n776368511\r\n2299330646\r\n2531165883\r\nNA\r\nNA\r\n69159001");
 		scrollPane.setViewportView(txtpnNetworkNameCemailemailnet);
 		{
 			JPanel buttonPane = new JPanel();
