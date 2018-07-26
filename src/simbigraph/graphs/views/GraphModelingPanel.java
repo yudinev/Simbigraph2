@@ -769,6 +769,10 @@ public class GraphModelingPanel extends SimControlPanel {
 			
 */				
 				//Set<Set<Object>> set = Statistic.getClusters(Context.getGraph());
+				
+				
+
+				
 				int [][] mass = Statistic.getTettaMatrix(Context.getGraph(),10);
 				for (int i = 0; i < mass[0].length; i++) {
 					System.out.println();
@@ -889,6 +893,17 @@ public class GraphModelingPanel extends SimControlPanel {
 
 		func.add(compare);
 		func.add(buttonSave);
+		//----------------------------------------------
+		JButton buttonCommunity = new JButton("   buttonCommunity1 ");
+		buttonCommunity.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			
+			System.out.println(graph);
+			}
+		});
+		func.add(buttonCommunity);
+		//-------------------------------------
+		
 		func.add(buttonBigComponent);
 
 

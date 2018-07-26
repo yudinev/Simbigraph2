@@ -316,11 +316,13 @@ if(iiiiii==1) graph.addEdge(6, v1, v4,  EdgeType.DIRECTED); else if(iiiiii==2) g
 							}}}}}}
 			
 			//	System.out.println(set);
+		System.out.println();
 			for (int j = 0; j < massKoef.length; j++) {
 				System.out.print(massKoef[j]+", ");}
-				//System.out.println("res12="+(arrcode[1|6|11]));
-				//System.out.println("res12="+(arrcode[6|11|16]));
-				//System.out.println("res12="+(arrcode[1|6|92]));
+			System.out.println();
+				System.out.println("res12="+(arrcode[1|6|11]));
+				System.out.println("res12="+(arrcode[6|11|16]));
+				System.out.println("res12="+(arrcode[1|6|92]));
 
 
 				//System.out.println("res="+(arrcode[3|7|11]));
