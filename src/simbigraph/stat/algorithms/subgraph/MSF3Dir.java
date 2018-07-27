@@ -14,7 +14,7 @@ import edu.uci.ics.jung.graph.util.EdgeType;
 import simbigraph.stat.algorithms.subgraph.RandMSF3DirParallel.VertexLayerParameters;
 
 /**
-   * @author Yudin Evgeniy, Yudina M.
+   * @author Yudin Evgeniy, Yudina M. 
 
  */
 public class MSF3Dir<V, E> {
@@ -26,7 +26,7 @@ public class MSF3Dir<V, E> {
 	 *
      * @author Yudina Maria, Yudin Evgeniy
 	 * @param graph
-	 *            the graph
+	 *            the graph hh
 	 */
 	public MSF3Dir(Graph<V, E> graph) {
 		this.graph = graph;
